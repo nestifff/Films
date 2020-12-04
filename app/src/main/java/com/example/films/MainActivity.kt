@@ -14,13 +14,6 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         this.supportActionBar?.hide()
-
-        if (savedInstanceState == null) {
-
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, FragmentMoviesList())
-                .commit()
-        }
     }
 
     override fun filmOnClick() {
@@ -32,11 +25,6 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun backOnClick() {
-
         supportFragmentManager.popBackStack()
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, FragmentMoviesList())
-            .commit()
     }
 }
