@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cl_movies_list"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_gray" >
+
+    <ImageView
+        android:id="@+id/iv_frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/frame_films_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_movies_list_movie_poster"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="3dp"
+        tools:src="@drawable/movies_list_movie_poster_avengers_end_game"
+        app:layout_constraintEnd_toEndOf="@+id/iv_frame"
+        app:layout_constraintStart_toStartOf="@+id/iv_frame"
+        app:layout_constraintTop_toTopOf="@+id/iv_frame" />
+
+
+    <ImageView
+        android:id="@+id/iv_gradient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/gradient_films_list"
+        app:layout_constraintEnd_toEndOf="@+id/iv_frame"
+        app:layout_constraintStart_toStartOf="@+id/iv_frame"
+        app:layout_constraintTop_toTopOf="@+id/iv_frame" />
+
+    <ImageView
+        android:id="@+id/iv_movies_list_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/like_active"
+        app:layout_constraintEnd_toEndOf="@+id/iv_frame"
+        app:layout_constraintTop_toTopOf="@+id/iv_frame" />
+
+    <ImageView
+        android:id="@+id/iv_square_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/square_age_films_list"
+        app:layout_constraintStart_toStartOf="@+id/iv_frame"
+        app:layout_constraintTop_toTopOf="@+id/iv_frame" />
+
+    <TextView
+        android:id="@+id/tv_movies_list_age_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_13"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_square_age"
+        app:layout_constraintEnd_toEndOf="@+id/iv_square_age"
+        app:layout_constraintStart_toStartOf="@+id/iv_square_age"
+        app:layout_constraintTop_toTopOf="@+id/iv_square_age"
+        tools:ignore="SmallSp" />
+
+    <RatingBar
+        android:id="@+id/rb_movie_details_rating"
+        style="?android:ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="8dp"
+        android:numStars="5"
+        android:rating="4"
+        android:theme="@style/mySmallRatingBarTheme"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_movies_list_movie_poster"
+        app:layout_constraintStart_toStartOf="@+id/iv_movies_list_movie_poster" />
+
+
+    <TextView
+        android:id="@+id/tv_movies_list_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="2dp"
+        android:text="@string/action_adventure_drama"
+        android:textColor="@color/pink"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/rb_movie_details_rating"
+        app:layout_constraintStart_toStartOf="@+id/iv_movies_list_movie_poster"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/tv_movies_list_number_of_reviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="@string/_125_reviews"
+        android:textColor="@color/gray"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/rb_movie_details_rating"
+        app:layout_constraintStart_toEndOf="@+id/rb_movie_details_rating"
+        app:layout_constraintTop_toTopOf="@+id/rb_movie_details_rating"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:id="@+id/tv_movies_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="6dp"
+        android:text="@string/avengers_end_game"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/iv_frame"
+        app:layout_constraintTop_toBottomOf="@+id/iv_movies_list_movie_poster" />
+
+    <TextView
+        android:id="@+id/tv_movies_list_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_137_min"
+        android:textColor="@color/gray"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_movies_list_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_movies_list_name"
+        tools:ignore="SmallSp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

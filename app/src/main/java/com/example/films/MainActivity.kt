@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity(),
-    FragmentMoviesList.TransactionsFragmentMLClicks,
-    FragmentMoviesDetails.TransactionsFragmentMDClicks {
+    FragmentMoviesDetails.TransactionsFragmentMDClicks,
+    MoviesListClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -16,15 +16,19 @@ class MainActivity : AppCompatActivity(),
         this.supportActionBar?.hide()
     }
 
-    override fun filmOnClick() {
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, FragmentMoviesDetails())
-            .addToBackStack(null)
-            .commit()
-    }
 
     override fun backOnClick() {
         supportFragmentManager.popBackStack()
+    }
+
+    override fun movieOnClick(movie: Movie) {
+
+        val fragment = FragmentMoviesDetails()
+        fragment.movie = movie
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
