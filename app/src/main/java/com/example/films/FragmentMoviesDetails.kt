@@ -24,9 +24,7 @@ class FragmentMoviesDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        if (savedInstanceState != null) {
-            movie = savedInstanceState[MOVIE_KEY] as Movie?
-        }
+        movie = arguments?.getSerializable(MOVIE_IN_BUNDLE_FRAGMENT) as Movie?
 
         val view = inflater.inflate(R.layout.fragment_movie_details, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.rv_movie_details_actors_list)
@@ -62,12 +60,7 @@ class FragmentMoviesDetails : Fragment() {
 
         return view
     }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(MOVIE_KEY, movie)
-    }
-
+    
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is TransactionsFragmentMDClicks){
@@ -86,4 +79,4 @@ class FragmentMoviesDetails : Fragment() {
 
 }
 
-const val MOVIE_KEY = "movie key"
+const val MOVIE_IN_BUNDLE_FRAGMENT = "movie"
