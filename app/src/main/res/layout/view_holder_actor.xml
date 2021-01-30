@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_gray">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_actors_list_actor_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/artist_photo_downey_jr"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_actors_list_actor_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/robert_downey_jr"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/iv_actors_list_actor_photo"
+        app:layout_constraintEnd_toEndOf="@+id/iv_actors_list_actor_photo"
+        app:layout_constraintStart_toStartOf="@+id/iv_actors_list_actor_photo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

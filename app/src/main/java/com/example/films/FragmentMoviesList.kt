@@ -1,18 +1,17 @@
 package com.example.films
 
-import android.content.Context
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
 
 class FragmentMoviesList : Fragment() {
-
-    private var listener: TransactionsFragmentMLClicks? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,28 +21,26 @@ class FragmentMoviesList : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
 
-        view.findViewById<ImageView>(R.id.iv_frame).apply {
-            setOnClickListener{
-                listener?.filmOnClick()
+        val recyclerView: RecyclerView = view.findViewById(R.id.rv_films_list)
+        val movies: List<Movie> = generateMovies(view.context)
+        val adapter = MoviesListAdapter(view.context, movies, activity as MoviesListClickListener)
+
+        recyclerView.adapter = adapter
+
+        recyclerView.layoutManager =
+            when (resources.configuration.orientation) {
+
+                ORIENTATION_PORTRAIT -> GridLayoutManager(view.context, 2)
+
+                else -> LinearLayoutManager(
+                    view.context,
+                    LinearLayoutManager.HORIZONTAL, false
+                )
+
+
             }
-        }
+
         return view
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is TransactionsFragmentMLClicks){
-            listener = context
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface TransactionsFragmentMLClicks {
-        fun filmOnClick()
     }
 
 }
