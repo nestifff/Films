@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
 class ActorsListAdapter (
@@ -34,6 +35,8 @@ class ActorsListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
     fun bind(actor: Actor) {
         tvName.text = actor.name
-        ivPhoto.setImageResource(actor.photoResource)
+        Glide.with(itemView.context)
+            .load(actor.imageUrl)
+            .into(ivPhoto)
     }
 }
