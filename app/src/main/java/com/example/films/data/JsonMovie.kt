@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal class JsonMovie(
+class JsonMovie(
     val id: Int,
     val title: String,
     @SerialName("poster_path")

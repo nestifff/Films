@@ -47,7 +47,7 @@ class FragmentMoviesList : Fragment() {
         scope.launch {
             val result = async { loadMoviesThisFragment(view) }
             result.await()
-            requireActivity().runOnUiThread {
+            withContext(Dispatchers.Main) {
                 (recyclerView.adapter as MoviesListAdapter).movies = movies
                 (recyclerView.adapter as MoviesListAdapter).notifyDataSetChanged()
             }
@@ -57,9 +57,9 @@ class FragmentMoviesList : Fragment() {
     }
 
     private suspend fun loadMoviesThisFragment(view: View) {
-        coroutineScope {
+        scope.async {
             launch { movies = JsonMovieRepository(view.context).loadMovies() }
-        }
+        }.await()
     }
 
 }
