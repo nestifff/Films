@@ -4,9 +4,9 @@ import android.content.Context
 import com.android.academy.fundamentals.homework.data.JsonActor
 import com.android.academy.fundamentals.homework.data.JsonGenre
 import com.android.academy.fundamentals.homework.data.JsonMovie
-import com.example.films.Actor
-import com.example.films.Genre
-import com.example.films.Movie
+import com.example.films.subjects.Actor
+import com.example.films.subjects.Genre
+import com.example.films.subjects.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
@@ -44,7 +44,12 @@ internal class JsonMovieRepository(private val context: Context) : MovieReposito
     private suspend fun loadGenres(): List<Genre> = withContext(Dispatchers.IO) {
         val data = readAssetFileToString("genres.json")
         val jsonGenres = jsonFormat.decodeFromString<List<JsonGenre>>(data)
-        jsonGenres.map { jsonGenre -> Genre(id = jsonGenre.id, name = jsonGenre.name) }
+        jsonGenres.map { jsonGenre ->
+            Genre(
+                id = jsonGenre.id,
+                name = jsonGenre.name
+            )
+        }
     }
 
     private fun readAssetFileToString(fileName: String): String {

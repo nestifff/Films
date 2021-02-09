@@ -1,7 +1,6 @@
-package com.example.films
+package com.example.films.movieDetails
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,12 +9,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import androidx.core.view.marginBottom
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import org.w3c.dom.Text
+import com.example.films.subjects.Movie
+import com.example.films.R
 
 
 class FragmentMoviesDetails : Fragment() {
@@ -70,7 +68,11 @@ class FragmentMoviesDetails : Fragment() {
             view.findViewById<TextView>(R.id.cast_head_text).visibility = View.GONE
 
         } else {
-            val adapter = ActorsListAdapter(view.context, movie!!.actors)
+            val adapter =
+                ActorsListAdapter(
+                    view.context,
+                    movie!!.actors
+                )
             recyclerView.adapter = adapter
             recyclerView.layoutManager =
                 LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)

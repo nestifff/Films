@@ -1,23 +1,34 @@
-package com.example.films
+package com.example.films.moviesList
 
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.films.data.JsonMovieRepository
+import com.example.films.App
+import com.example.films.subjects.Movie
+import com.example.films.R
 import kotlinx.coroutines.*
 
 
 class FragmentMoviesList : Fragment() {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
     private var movies: List<Movie> = listOf()
+
+    private val loadMoviesProvider: LoadMoviesProvider =
+        LoadMoviesProvider(App.instance.applicationContext)
+
+    private val viewModel by viewModels<MoviesListViewModel> {
+        FragmentMoviesListViewModelFactory(
+            loadMoviesProvider
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,10 +36,16 @@ class FragmentMoviesList : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        viewModel.loadMovies()
+
         val view = inflater.inflate(R.layout.fragment_movies_list, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.rv_films_list)
 
-        val adapter = MoviesListAdapter(view.context, movies, activity as MoviesListClickListener)
+        val adapter = MoviesListAdapter(
+            view.context,
+            movies,
+            activity as MoviesListClickListener
+        )
         recyclerView.adapter = adapter
 
         recyclerView.layoutManager =
@@ -40,26 +57,19 @@ class FragmentMoviesList : Fragment() {
                     view.context,
                     LinearLayoutManager.HORIZONTAL, false
                 )
-
-
             }
 
-        scope.launch {
-            val result = async { loadMoviesThisFragment(view) }
-            result.await()
-            withContext(Dispatchers.Main) {
-                (recyclerView.adapter as MoviesListAdapter).movies = movies
-                (recyclerView.adapter as MoviesListAdapter).notifyDataSetChanged()
-            }
-        }
+        listenMoviesData(recyclerView)
 
         return view
     }
 
-    private suspend fun loadMoviesThisFragment(view: View) {
-        scope.async {
-            launch { movies = JsonMovieRepository(view.context).loadMovies() }
-        }.await()
+    private fun listenMoviesData(recyclerView: RecyclerView) {
+        viewModel.loadingMovies.observe(viewLifecycleOwner, Observer {
+            movies = viewModel.loadingMovies.value ?: listOf()
+            (recyclerView.adapter as MoviesListAdapter).movies = movies
+            (recyclerView.adapter as MoviesListAdapter).notifyDataSetChanged()
+        })
     }
 
 }

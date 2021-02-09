@@ -1,4 +1,4 @@
-package com.example.films
+package com.example.films.subjects
 
 import java.io.Serializable
 

@@ -3,10 +3,13 @@ package com.example.films
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
+import com.example.films.movieDetails.FragmentMoviesDetails
+import com.example.films.movieDetails.MOVIE_IN_BUNDLE_FRAGMENT
+import com.example.films.moviesList.MoviesListClickListener
+import com.example.films.subjects.Movie
 
 class MainActivity : AppCompatActivity(),
-    FragmentMoviesDetails.TransactionsFragmentMDClicks,
+            FragmentMoviesDetails.TransactionsFragmentMDClicks,
     MoviesListClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {

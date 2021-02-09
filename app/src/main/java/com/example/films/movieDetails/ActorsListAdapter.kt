@@ -1,4 +1,4 @@
-package com.example.films
+package com.example.films.movieDetails
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.films.subjects.Actor
+import com.example.films.R
 import com.google.android.material.imageview.ShapeableImageView
 
 class ActorsListAdapter (
@@ -19,7 +21,13 @@ class ActorsListAdapter (
     override fun getItemCount() = actors.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActorsListViewHolder {
-        return ActorsListViewHolder(inflater.inflate(R.layout.view_holder_actor, parent, false))
+        return ActorsListViewHolder(
+            inflater.inflate(
+                R.layout.view_holder_actor,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ActorsListViewHolder, position: Int) {
