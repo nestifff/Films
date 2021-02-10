@@ -7,16 +7,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 
 class MoviesListAdapter(
     context: Context,
-    var movies : List<Movie>,
+    var movies: List<Movie>,
     private val clickListener: MoviesListClickListener?
 ) : RecyclerView.Adapter<MoviesListViewHolder>() {
 
-    private val inflater : LayoutInflater = LayoutInflater.from(context)
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getItemCount() = movies.size
 
@@ -33,31 +35,57 @@ class MoviesListAdapter(
 
 }
 
-class MoviesListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    private val tvName : TextView = view.findViewById(R.id.tv_movies_list_name)
-    private val tvAgeLimit : TextView = view.findViewById(R.id.tv_movies_list_age_limit)
-    private val tvGenre : TextView = view.findViewById(R.id.tv_movies_list_genre)
-    private val tvNumOfReviews : TextView = view.findViewById(R.id.tv_movies_list_number_of_reviews)
-    private val tvLength : TextView = view.findViewById(R.id.tv_movies_list_length)
-    private val rbRating : RatingBar = view.findViewById(R.id.rb_movie_details_rating)
-    private val ivMoviePoster : ImageView = view.findViewById(R.id.iv_movies_list_movie_poster)
+    private val tvName: TextView = view.findViewById(R.id.tv_movies_list_name)
+    private val tvAgeLimit: TextView = view.findViewById(R.id.tv_movies_list_age_limit)
+    private val tvGenre: TextView = view.findViewById(R.id.tv_movies_list_genre)
+    private val tvNumOfReviews: TextView = view.findViewById(R.id.tv_movies_list_number_of_reviews)
+    private val tvLength: TextView = view.findViewById(R.id.tv_movies_list_length)
+    private val rbRating: RatingBar = view.findViewById(R.id.rb_movie_details_rating)
+    private val ivMoviePoster: ImageView = view.findViewById(R.id.iv_movies_list_movie_poster)
     private val ivIsLiked: ImageView = view.findViewById(R.id.iv_movies_list_like)
 
-    fun bind(movie : Movie) {
+    fun bind(movie: Movie) {
 
-        tvName.text = movie.name
-        tvAgeLimit.text = "${movie.ageLimit}+"
-        tvGenre.text = movie.genre
-        tvNumOfReviews.text = "${movie.numOfReviews} reviews"
-        tvLength.text = "${movie.length} min"
+        tvName.text = movie.title
+        tvAgeLimit.text = "${movie.pgAge}+"
+
+        val strBuilt: StringBuilder = java.lang.StringBuilder()
+        for ((index, genre) in movie.genres.withIndex()) {
+            val name: String = genre.name
+            strBuilt.append(
+                when (index) {
+                    (movie.genres.size - 1) -> name
+                    else -> "$name, "
+                }
+            )
+        }
+        tvGenre.text = strBuilt.toString()
+
+        tvNumOfReviews.text = "${movie.reviewCount} reviews"
+        tvLength.text = "${movie.runningTime} min"
         rbRating.rating = movie.rating.toFloat()
-        ivMoviePoster.setImageResource(movie.posterImageRecourse)
 
+        Glide.with(itemView.context)
+            .load(movie.imageUrl)
+            .into(ivMoviePoster)
+
+        val isLiked = movie.isLiked
         if (movie.isLiked) {
             ivIsLiked.setImageResource(R.drawable.like_active)
         } else {
             ivIsLiked.setImageResource(R.drawable.like_inactive)
+        }
+
+        ivIsLiked.setOnClickListener {
+            if (movie.isLiked) {
+                ivIsLiked.setImageResource(R.drawable.like_inactive)
+                movie.isLiked = false
+            } else {
+                ivIsLiked.setImageResource(R.drawable.like_active)
+                movie.isLiked = true
+            }
         }
     }
 }

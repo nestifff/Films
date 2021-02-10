@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/iv_movie_details_picture_background_top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:scaleType="centerCrop"
             android:src="@drawable/background_picture"
             app:layout_constraintTop_toTopOf="parent" />
@@ -120,6 +120,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:paddingBottom="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="@string/storyline_content"
@@ -134,7 +135,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="36dp"
             android:text="@string/cast"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -145,7 +145,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_movie_details_actors_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="130dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
