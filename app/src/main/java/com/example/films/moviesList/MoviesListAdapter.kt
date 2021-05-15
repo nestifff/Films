@@ -9,7 +9,7 @@ import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.films.subjects.Movie
+import com.example.films.model.dataClasses.Movie
 import com.example.films.R
 
 
@@ -56,7 +56,7 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(movie: Movie) {
 
         tvName.text = movie.title
-        tvAgeLimit.text = "${movie.pgAge}+"
+        tvAgeLimit.text = "${movie.age}+"
 
         val strBuilt: StringBuilder = java.lang.StringBuilder()
         for ((index, genre) in movie.genres.withIndex()) {
@@ -71,11 +71,11 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         tvGenre.text = strBuilt.toString()
 
         tvNumOfReviews.text = "${movie.reviewCount} reviews"
-        tvLength.text = "${movie.runningTime} min"
-        rbRating.rating = movie.rating.toFloat()
+        tvLength.text = "120 min"
+        rbRating.rating = movie.rating / 2
 
         Glide.with(itemView.context)
-            .load(movie.imageUrl)
+            .load(movie.posterImageUrl)
             .into(ivMoviePoster)
 
         val isLiked = movie.isLiked

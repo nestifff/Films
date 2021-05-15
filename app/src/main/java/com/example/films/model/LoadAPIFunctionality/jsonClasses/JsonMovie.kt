@@ -8,17 +8,15 @@ class JsonMovie(
     val id: Int,
     val title: String,
     @SerialName("poster_path")
-    val posterPicture: String,
+    val posterPicture: String?,
     @SerialName("backdrop_path")
-    val backdropPicture: String,
-    val runtime: Int,
+    val backdropPicture: String?,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
-    val actors: List<Int>,
+    val genreIds: List<Int>?,
     @SerialName("vote_average")
-    val ratings: Float,
+    val ratings: Float?,
     @SerialName("vote_count")
-    val votesCount: Int,
-    val overview: String,
-    val adult: Boolean
+    val votesCount: Int?,
+    val overview: String?,
+    val adult: Boolean?
 )
