@@ -56,8 +56,10 @@ class FragmentMoviesList : Fragment() {
         return view
     }
 
-    private suspend fun loadMoviesThisFragment(view:View){
-        movies = JsonMovieRepository(view.context).loadMovies()
+    private suspend fun loadMoviesThisFragment(view: View) {
+        scope.async {
+            launch { movies = JsonMovieRepository(view.context).loadMovies() }
+        }.await()
     }
 
 }

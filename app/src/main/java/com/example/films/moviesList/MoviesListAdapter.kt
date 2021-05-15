@@ -1,4 +1,4 @@
-package com.example.films
+package com.example.films.moviesList
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.films.model.dataClasses.Movie
+import com.example.films.R
 
 
 class MoviesListAdapter(
@@ -23,7 +24,13 @@ class MoviesListAdapter(
     override fun getItemCount() = movies.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesListViewHolder {
-        return MoviesListViewHolder(inflater.inflate(R.layout.view_holder_movie, parent, false))
+        return MoviesListViewHolder(
+            inflater.inflate(
+                R.layout.view_holder_movie,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: MoviesListViewHolder, position: Int) {
@@ -49,7 +56,7 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(movie: Movie) {
 
         tvName.text = movie.title
-        tvAgeLimit.text = "${movie.pgAge}+"
+        tvAgeLimit.text = "${movie.age}+"
 
         val strBuilt: StringBuilder = java.lang.StringBuilder()
         for ((index, genre) in movie.genres.withIndex()) {
@@ -64,11 +71,11 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         tvGenre.text = strBuilt.toString()
 
         tvNumOfReviews.text = "${movie.reviewCount} reviews"
-        tvLength.text = "${movie.runningTime} min"
-        rbRating.rating = movie.rating.toFloat()
+        tvLength.text = "120 min"
+        rbRating.rating = movie.rating / 2
 
         Glide.with(itemView.context)
-            .load(movie.imageUrl)
+            .load(movie.posterImageUrl)
             .into(ivMoviePoster)
 
         val isLiked = movie.isLiked
