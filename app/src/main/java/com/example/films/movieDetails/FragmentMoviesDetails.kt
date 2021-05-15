@@ -1,4 +1,4 @@
-package com.example.films
+package com.example.films.movieDetails
 
 import android.content.Context
 import android.os.Bundle
@@ -6,11 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
+import com.bumptech.glide.Glide
+import com.example.films.model.dataClasses.Movie
+import com.example.films.R
 
 
 class FragmentMoviesDetails : Fragment() {
@@ -27,8 +28,8 @@ class FragmentMoviesDetails : Fragment() {
         movie = arguments?.getSerializable(MOVIE_IN_BUNDLE_FRAGMENT) as Movie?
 
         val view = inflater.inflate(R.layout.fragment_movie_details, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.rv_movie_details_actors_list)
 
+        val ivPoster: ImageView = view.findViewById(R.id.iv_movie_details_picture_background_top)
         val tvAgeLimit: TextView = view.findViewById(R.id.tv_movie_details_age_limit)
         val tvName: TextView = view.findViewById(R.id.tv_movie_details_name)
         val tvGenre: TextView = view.findViewById(R.id.tv_movie_details_genre)
@@ -36,34 +37,42 @@ class FragmentMoviesDetails : Fragment() {
         val rbRating: RatingBar = view.findViewById(R.id.rb_movie_details_rating)
         val tvStoryline: TextView = view.findViewById(R.id.tv_movie_details_storyline)
 
-        tvAgeLimit.text = "${movie!!.ageLimit}+"
-        tvName.text = movie!!.name
-        tvGenre.text = movie!!.genre
-        tvNumOfReviews.text = "${movie!!.numOfReviews} reviews"
-        tvStoryline.text = movie!!.storyline
-        rbRating.rating = movie!!.rating.toFloat()
+        tvAgeLimit.text = "${movie?.age ?: 0}+"
+        tvName.text = movie?.title ?: "---"
 
-        if (movie!!.actors.isEmpty()) {
-            recyclerView.visibility = View.GONE
+        Glide.with(view.context)
+            .load(movie?.backgroundImageUrl)
+            .into(ivPoster)
 
-        } else {
-            val adapter = ActorsListAdapter(view.context, movie!!.actors)
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
-        }
+        val strBuilt: StringBuilder = java.lang.StringBuilder()
+            for ((index, genre) in movie!!.genres.withIndex()) {
+                val name: String = genre.name
+                strBuilt.append(
+                    when (index) {
+                        (movie!!.genres.size - 1) -> name
+                        else -> "$name, "
+                    }
+                )
+            }
+
+        tvGenre.text = strBuilt.toString()
+
+        tvNumOfReviews.text = "${movie?.reviewCount} reviews"
+        tvStoryline.text = movie?.storyLine
+        rbRating.rating = (movie?.rating ?: 0f) / 2
 
         view.findViewById<TextView>(R.id.tv_movie_details_button_back).apply {
-            setOnClickListener{
+            setOnClickListener {
                 listener?.backOnClick()
             }
         }
 
         return view
     }
-    
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is TransactionsFragmentMDClicks){
+        if (context is TransactionsFragmentMDClicks) {
             listener = context
         }
     }
