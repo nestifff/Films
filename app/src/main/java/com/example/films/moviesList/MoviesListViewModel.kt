@@ -1,17 +1,21 @@
 package com.example.films.moviesList
 
 import android.content.Context
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.database.MoviesGenresDB
 import com.example.films.model.database.movies.MovieForDB
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MoviesListViewModel(
     private val provider: LoadMoviesProvider?,
-    applicationContext: Context
+    private val applicationContext: Context
 ) : ViewModel() {
 
     private val _loadingMovies: MutableLiveData<MutableList<Movie>> = MutableLiveData(mutableListOf())
@@ -40,10 +44,13 @@ class MoviesListViewModel(
 
                 if (!alreadyLoadedFromAPI) {
                     moviesAddToBD = provider?.loadMoviesProvider() ?: mutableListOf()
+                    moviesAddToBD.sortByDescending { it.rating }
                     alreadyLoadedFromAPI = true
 
-                    genres = provider?.genresList?.genres ?: genres
-                    addMoviesToBD()
+                    if (moviesAddToBD.isNotEmpty()) {
+                        genres = provider?.genresList?.genres ?: genres
+                        addMoviesToBD()
+                    }
                 }
 
             } else {
@@ -52,8 +59,10 @@ class MoviesListViewModel(
                 _loadingMovies.postValue(moviesAddToBD)
                 alreadyLoadedFromAPI = true
 
-                genres = provider?.genresList?.genres ?: genres
-                addMoviesToBD()
+                if (moviesAddToBD.isNotEmpty()) {
+                    genres = provider?.genresList?.genres ?: genres
+                    addMoviesToBD()
+                }
             }
         }
     }
