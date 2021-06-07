@@ -11,7 +11,7 @@ import com.example.films.model.database.movies.MovieForDB
 
 @Database(
     entities = [MovieForDB::class, Genre::class],
-    version = 2
+    version = 3
 )
 abstract class MoviesGenresDB : RoomDatabase() {
 

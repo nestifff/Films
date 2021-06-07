@@ -1,4 +1,4 @@
-package com.example.films.model
+package com.example.films.model.LoadAPIFunctionality
 
 import com.example.films.model.dataClasses.Genre
 

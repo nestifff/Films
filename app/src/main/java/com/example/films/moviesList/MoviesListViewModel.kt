@@ -18,7 +18,8 @@ class MoviesListViewModel(
     private val applicationContext: Context
 ) : ViewModel() {
 
-    private val _loadingMovies: MutableLiveData<MutableList<Movie>> = MutableLiveData(mutableListOf())
+    private val _loadingMovies: MutableLiveData<MutableList<Movie>> =
+        MutableLiveData(mutableListOf())
     val loadingMovies: LiveData<MutableList<Movie>>
         get() = _loadingMovies
 
@@ -43,10 +44,18 @@ class MoviesListViewModel(
 
                 if (!alreadyLoadedFromAPI) {
                     moviesFromAPI = loadMoviesFromAPI(provider)
+                    genres = provider?.genresList?.genres ?: genres
                     alreadyLoadedFromAPI = true
-                    // load from API
-                    // update BD
-                    updateDBMoviesAndGetNovelty(genres, moviesFromAPI, database)
+
+                    if (updateDBMoviesAndGetNovelty(
+                            genres,
+                            moviesFromAPI,
+                            database
+                        )
+                            .size != 0
+                    ) {
+                        _loadingMovies.postValue(moviesFromAPI)
+                    }
                 }
 
             } else {
@@ -129,41 +138,6 @@ class MoviesListViewModel(
         movies.sortByDescending { it.rating }
         _loadingMovies.postValue(movies)
     }*/
-
-    private fun addMoviesToBD() {
-
-        val genresMap: Map<Genre, Int> = genres.map {
-            it to it.id
-        }.toMap()
-        val moviesRightType: MutableList<MovieForDB> = mutableListOf()
-        var movieId = 1
-        for (m: Movie in moviesFromAPI) {
-
-            for (genre: Genre in m.genres) {
-                moviesRightType.add(
-                    MovieForDB(
-                        id = movieId,
-                        age = m.age,
-                        title = m.title,
-                        genreID = genresMap[genre] ?: 0,
-                        reviewCount = m.reviewCount,
-                        isLiked = m.isLiked,
-                        rating = m.rating,
-                        posterImageUrl = m.posterImageUrl,
-                        backgroundImageUrl = m.backgroundImageUrl,
-                        storyLine = m.storyLine
-                    )
-                )
-                ++movieId
-            }
-        }
-
-        database.movieDao.deleteAllMovies()
-        database.genreDao.deleteAllGenres()
-
-        database.genreDao.insertGenres(genres = *genres.toTypedArray())
-        database.movieDao.insertMovies(movies = *moviesRightType.toTypedArray())
-    }
 
 }
 

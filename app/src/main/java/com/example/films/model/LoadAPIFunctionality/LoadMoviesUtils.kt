@@ -64,18 +64,21 @@ fun addMoviesToBD(
     database: MoviesGenresDB
 ) {
 
+    if (movies.isEmpty()) {
+        return
+    }
+
     val genresMap: Map<Genre, Int> = genres.map {
         it to it.id
     }.toMap()
 
     val moviesRightType: MutableList<MovieForDB> = mutableListOf()
-    var movieId = 1
     for (m: Movie in movies) {
 
         for (genre: Genre in m.genres) {
             moviesRightType.add(
                 MovieForDB(
-                    id = movieId,
+                    idAPI = m.id,
                     age = m.age,
                     title = m.title,
                     genreID = genresMap[genre] ?: 0,
@@ -87,7 +90,6 @@ fun addMoviesToBD(
                     storyLine = m.storyLine
                 )
             )
-            ++movieId
         }
     }
 

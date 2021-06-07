@@ -14,3 +14,5 @@ const val widthBackgroundImage = "w780"
 const val widthPosterImage = "w500"
 const val widthActorImage = "w45"
 
+const val TAG_retrieveMoviesWorkers = "tag_to_retrieve_movies_between_workers"
+

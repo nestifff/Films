@@ -1,12 +1,11 @@
 package com.example.films.moviesList
 
-import com.example.films.model.GenresList
+import com.example.films.model.LoadAPIFunctionality.GenresList
 import com.example.films.model.LoadAPIFunctionality.GenresListAPICreator
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.LoadAPIFunctionality.MoviesListAPICreator
 
-class LoadMoviesProvider :
-    LoadMovies {
+class LoadMoviesProvider : LoadMovies {
 
     val genresList = GenresList()
     private val genresListCreator =

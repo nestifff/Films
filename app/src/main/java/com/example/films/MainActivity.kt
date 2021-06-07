@@ -3,6 +3,9 @@ package com.example.films
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.work.*
+import com.example.films.model.WorkManager.NAME_UNIQUE_WORK
+import com.example.films.model.WorkManager.WorkerLoadFromAPI
 import com.example.films.movieDetails.FragmentMoviesDetails
 import com.example.films.movieDetails.MOVIE_IN_BUNDLE_FRAGMENT
 import com.example.films.moviesList.FragmentMoviesList
@@ -10,9 +13,10 @@ import com.example.films.moviesList.MOVIES_KEY
 import com.example.films.moviesList.MoviesListClickListener
 import com.example.films.moviesList.SEARCH_LINE_KEY
 import com.example.films.model.dataClasses.Movie
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(),
-            FragmentMoviesDetails.TransactionsFragmentMDClicks,
+    FragmentMoviesDetails.TransactionsFragmentMDClicks,
     MoviesListClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +25,9 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         this.supportActionBar?.hide()
+
+        createWorkLoadMoviesInBackground()
+
     }
 
 
@@ -54,5 +61,28 @@ class MainActivity : AppCompatActivity(),
             .add(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun createWorkLoadMoviesInBackground() {
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+
+        val workLoadMovies =
+            PeriodicWorkRequestBuilder<WorkerLoadFromAPI>(
+                8,
+                TimeUnit.HOURS
+            )
+                .setConstraints(constraints)
+                .build()
+
+        WorkManager.getInstance(applicationContext)
+            .enqueueUniquePeriodicWork(
+                NAME_UNIQUE_WORK,
+                ExistingPeriodicWorkPolicy.REPLACE,
+                workLoadMovies
+            )
     }
 }

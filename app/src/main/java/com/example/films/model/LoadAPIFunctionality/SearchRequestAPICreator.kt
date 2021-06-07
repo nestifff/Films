@@ -4,7 +4,6 @@ import android.util.Log
 import com.android.academy.fundamentals.homework.data.JsonMovie
 import com.example.films.APIBaseUrl
 import com.example.films.TAG
-import com.example.films.model.GenresList
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.widthBackgroundImage
@@ -20,7 +19,8 @@ import okhttp3.Response
 class SearchRequestAPICreator {
 
     private val jsonFormat = Json { ignoreUnknownKeys = true }
-    private var genresList = GenresList()
+    private var genresList =
+        GenresList()
 
     suspend fun getMovies(request: String): MutableList<Movie> = withContext(Dispatchers.IO) {
 

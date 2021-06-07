@@ -147,7 +147,9 @@ class FragmentMoviesList : Fragment() {
     }
 
     private fun listenMoviesData(recyclerView: RecyclerView) {
+
         viewModel.loadingMovies.observe(viewLifecycleOwner, Observer {
+
             movies = viewModel.loadingMovies.value ?: mutableListOf()
             (recyclerView.adapter as MoviesListAdapter).movies = movies
             (recyclerView.adapter as MoviesListAdapter).notifyDataSetChanged()

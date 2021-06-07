@@ -16,7 +16,7 @@ interface MovieDao {
     @Insert
     fun insertMovies(vararg movies: MovieForDB)
 
-    @Query("SELECT * FROM movies WHERE id=:id ")
-    fun findMovieByID(id: Int): MovieForDB?
+    @Query("SELECT * FROM movies WHERE id_api=:id ")
+    fun findMovieByID(id: Int): MovieForDB
 
 }

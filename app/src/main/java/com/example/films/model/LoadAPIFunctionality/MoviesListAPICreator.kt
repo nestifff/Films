@@ -3,7 +3,6 @@ package com.example.films.model.LoadAPIFunctionality
 import android.util.Log
 import com.android.academy.fundamentals.homework.data.JsonMovie
 import com.example.films.*
-import com.example.films.model.GenresList
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import kotlinx.coroutines.Dispatchers
