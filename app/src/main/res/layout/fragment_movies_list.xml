@@ -12,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/circles_movies_list"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/et_search"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
+        android:id="@+id/tv_moviesListTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -27,9 +27,32 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/iv_circles"
         app:layout_constraintBottom_toBottomOf="@+id/iv_circles"
-        app:layout_constraintStart_toEndOf="@+id/iv_circles"
-        app:layout_constraintTop_toTopOf="@+id/iv_circles" />
+        app:layout_constraintStart_toEndOf="@+id/iv_circles" />
+
+    <TextView
+        android:id="@+id/tv_moviesNameOfMoviesList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:text="@string/popular_movies"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_moviesListTop"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_moviesListFoundCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@+id/iv_search"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_moviesNameOfMoviesList"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <ImageView
@@ -37,10 +60,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="20dp"
         android:src="@drawable/search_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/tv_moviesListTop"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_moviesListTop" />
 
     <EditText
         android:id="@+id/et_search"
@@ -49,24 +72,24 @@
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:hint="@string/search_movie"
         android:inputType="text"
         android:textColorHighlight="#E91E63"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_moviesListTop"
         app:layout_constraintBottom_toTopOf="@+id/rv_films_list"
-        app:layout_constraintTop_toBottomOf="@+id/iv_circles" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id = "@+id/rv_films_list"
+        android:id="@+id/rv_films_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        tools:listitem="@layout/view_holder_movie"
-        app:layout_constraintTop_toBottomOf="@+id/et_search"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_marginTop="42dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_circles"
+        tools:layout_editor_absoluteX="8dp"
+        tools:listitem="@layout/view_holder_movie" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

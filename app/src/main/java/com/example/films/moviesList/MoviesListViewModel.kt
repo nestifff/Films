@@ -1,17 +1,15 @@
 package com.example.films.moviesList
 
 import android.content.Context
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
+import com.example.films.model.LoadAPIFunctionality.loadMoviesFromAPI
+import com.example.films.model.LoadAPIFunctionality.loadMoviesFromDB
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.database.MoviesGenresDB
 import com.example.films.model.database.movies.MovieForDB
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MoviesListViewModel(
     private val provider: LoadMoviesProvider?,
@@ -26,16 +24,35 @@ class MoviesListViewModel(
 
     private val database: MoviesGenresDB = MoviesGenresDB.create(applicationContext)
     private lateinit var genres: MutableList<Genre>
-    private lateinit var moviesForDB: MutableList<MovieForDB>
+    private lateinit var moviesFromDB: MutableList<MovieForDB>
 
-    private lateinit var moviesAddToBD: MutableList<Movie>
+    private lateinit var moviesFromAPI: MutableList<Movie>
 
 
     fun loadMovies() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            genres = database.genreDao.getAllGenres()
+            moviesFromAPI = loadMoviesFromDB(database)
+
+            if (moviesFromDB.size != 0) {
+                _loadingMovies.postValue(moviesFromAPI)
+
+                if (!alreadyLoadedFromAPI) {
+                    moviesFromAPI = loadMoviesFromAPI(provider)
+                    // load from API
+                    // update BD
+                }
+            } else {
+                moviesFromAPI = loadMoviesFromAPI(provider)
+                _loadingMovies.postValue(moviesFromAPI)
+                // load movies from API
+                // set them into liveData
+                // update BD
+            }
+
+
+            /*genres = database.genreDao.getAllGenres()
             moviesForDB = database.movieDao.getAllMovies()
 
             if (!(genres.isEmpty() || moviesForDB.isEmpty())) {
@@ -63,11 +80,11 @@ class MoviesListViewModel(
                     genres = provider?.genresList?.genres ?: genres
                     addMoviesToBD()
                 }
-            }
+            }*/
         }
     }
 
-    private fun createMoviesListFromBDData() {
+    /*private fun createMoviesListFromBDData() {
 
         val movies: MutableList<Movie> = mutableListOf()
         moviesForDB.sortBy { it.title }
@@ -100,7 +117,7 @@ class MoviesListViewModel(
 
         movies.sortByDescending { it.rating }
         _loadingMovies.postValue(movies)
-    }
+    }*/
 
     private fun addMoviesToBD() {
 
@@ -109,7 +126,7 @@ class MoviesListViewModel(
         }.toMap()
         val moviesRightType: MutableList<MovieForDB> = mutableListOf()
         var movieId = 1
-        for (m: Movie in moviesAddToBD) {
+        for (m: Movie in moviesFromAPI) {
 
             for (genre: Genre in m.genres) {
                 moviesRightType.add(

@@ -2,13 +2,10 @@ package com.example.films.model.LoadAPIFunctionality
 
 import android.util.Log
 import com.android.academy.fundamentals.homework.data.JsonMovie
-import com.example.films.APIBaseUrl
-import com.example.films.TAG
+import com.example.films.*
 import com.example.films.model.GenresList
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
-import com.example.films.widthBackgroundImage
-import com.example.films.widthPosterImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
@@ -31,24 +28,25 @@ class MoviesListAPICreator(
 
         } else {
 
-            for (i in 1..401 step 80)
-            try {
-                createGetMoviesCall(i).execute().use { response ->
-                    successfulLoadMovies(response)
+            for (i in 1..6)
+                try {
+                    createGetPopularMoviesCall(i).execute().use { response ->
+                        successfulLoadMovies(response)
+                    }
+                } catch (e: Exception) {
+                    errorLoadingMovies(e)
                 }
-            } catch (e: Exception) {
-                errorLoadingMovies(e)
-            }
 
             movies
         }
     }
 
-    private fun createGetMoviesCall(i: Int) = OkHttpClient().newCall(createGetMoviesRequest(i))
+    private fun createGetPopularMoviesCall(i: Int) =
+        OkHttpClient().newCall(createGetPopularMoviesRequest(i))
 
-    private fun createGetMoviesRequest(i: Int) = Request.Builder()
+    private fun createGetPopularMoviesRequest(i: Int) = Request.Builder()
         .get()
-        .url("https://api.themoviedb.org/3/movie/top_rated?api_key=24ab06e71fc730e392e92a68c467de4c&language=en-US&page=$i")
+        .url("${APIGetPopularMovies_Page}$i")
         .build()
 
     private fun errorLoadingMovies(error: Throwable) {

@@ -2,6 +2,7 @@ package com.example.films.model.LoadAPIFunctionality
 
 import android.util.Log
 import com.android.academy.fundamentals.homework.data.JsonGenre
+import com.example.films.APIGetGenresList
 import com.example.films.TAG
 import com.example.films.model.dataClasses.Genre
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +42,7 @@ class GenresListAPICreator() {
 
     private fun createGetGenresRequest() = Request.Builder()
         .get()
-        .url("https://api.themoviedb.org/3/genre/movie/list?api_key=24ab06e71fc730e392e92a68c467de4c&language=en-US")
+        .url("$APIGetGenresList")
         .build()
 
     private fun errorLoadingGenres(error: Throwable) {
