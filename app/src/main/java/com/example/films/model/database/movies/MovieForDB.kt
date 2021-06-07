@@ -11,7 +11,6 @@ import java.io.Serializable
 @Entity(tableName = "movies")
 data class MovieForDB(
 
-    @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Int,
 
@@ -41,4 +40,9 @@ data class MovieForDB(
 
     @ColumnInfo(name = "story_line")
     val storyLine: String,
-) : Serializable
+) : Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id_primary")
+    var idPrimary: Int = 0
+}

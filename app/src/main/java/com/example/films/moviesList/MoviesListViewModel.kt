@@ -2,8 +2,10 @@ package com.example.films.moviesList
 
 import android.content.Context
 import androidx.lifecycle.*
+import com.example.films.model.LoadAPIFunctionality.loadGenresFromDB
 import com.example.films.model.LoadAPIFunctionality.loadMoviesFromAPI
 import com.example.films.model.LoadAPIFunctionality.loadMoviesFromDB
+import com.example.films.model.LoadAPIFunctionality.updateDBMoviesAndGetNovelty
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.database.MoviesGenresDB
@@ -24,7 +26,7 @@ class MoviesListViewModel(
 
     private val database: MoviesGenresDB = MoviesGenresDB.create(applicationContext)
     private lateinit var genres: MutableList<Genre>
-    private lateinit var moviesFromDB: MutableList<MovieForDB>
+    private lateinit var moviesFromDB: MutableList<Movie>
 
     private lateinit var moviesFromAPI: MutableList<Movie>
 
@@ -33,22 +35,31 @@ class MoviesListViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            moviesFromAPI = loadMoviesFromDB(database)
+            genres = loadGenresFromDB(database)
+            moviesFromDB = loadMoviesFromDB(database, genres)
 
             if (moviesFromDB.size != 0) {
-                _loadingMovies.postValue(moviesFromAPI)
+                _loadingMovies.postValue(moviesFromDB)
 
                 if (!alreadyLoadedFromAPI) {
                     moviesFromAPI = loadMoviesFromAPI(provider)
+                    alreadyLoadedFromAPI = true
                     // load from API
                     // update BD
+                    updateDBMoviesAndGetNovelty(genres, moviesFromAPI, database)
                 }
+
             } else {
+
                 moviesFromAPI = loadMoviesFromAPI(provider)
+                alreadyLoadedFromAPI = true
                 _loadingMovies.postValue(moviesFromAPI)
-                // load movies from API
-                // set them into liveData
-                // update BD
+
+                if (moviesFromAPI.isNotEmpty()) {
+                    genres = provider?.genresList?.genres ?: genres
+                    updateDBMoviesAndGetNovelty(genres, moviesFromAPI, database)
+                }
+
             }
 
 

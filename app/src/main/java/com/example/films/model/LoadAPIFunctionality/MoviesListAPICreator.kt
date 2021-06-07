@@ -66,6 +66,7 @@ class MoviesListAPICreator(
         Log.i(TAG, moviesJson.length.toString())
 
         movies.addAll(loadMoviesJson(moviesJson))
+        var i = 10
     }
 
     private suspend fun loadMoviesJson(dataStr: String): List<Movie> = withContext(Dispatchers.IO) {

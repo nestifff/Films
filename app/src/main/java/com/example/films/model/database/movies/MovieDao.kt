@@ -13,6 +13,10 @@ interface MovieDao {
     @Query("DELETE from movies")
     fun deleteAllMovies()
 
-    @Insert()
+    @Insert
     fun insertMovies(vararg movies: MovieForDB)
+
+    @Query("SELECT * FROM movies WHERE id=:id ")
+    fun findMovieByID(id: Int): MovieForDB?
+
 }
