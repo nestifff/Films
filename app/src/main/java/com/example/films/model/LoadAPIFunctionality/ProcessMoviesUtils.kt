@@ -35,6 +35,6 @@ fun joinMoviesWithGenes(moviesOld: MutableList<MovieForDB>, genres: List<Genre>)
         ++i
     }
 
-    movies.sortByDescending { it.rating }
+    movies.sortByDescending { it.reviewCount }
     return movies
 }

@@ -71,14 +71,12 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         tvGenre.text = strBuilt.toString()
 
         tvNumOfReviews.text = "${movie.reviewCount} reviews"
-        tvLength.text = "120 min"
         rbRating.rating = movie.rating / 2
 
         Glide.with(itemView.context)
             .load(movie.posterImageUrl)
             .into(ivMoviePoster)
 
-        val isLiked = movie.isLiked
         if (movie.isLiked) {
             ivIsLiked.setImageResource(R.drawable.like_active)
         } else {

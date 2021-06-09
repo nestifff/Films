@@ -1,5 +1,6 @@
 package com.example.films.moviesList
 
+import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
@@ -12,35 +13,29 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.films.MainActivity
 import com.example.films.R
-import com.example.films.model.LoadAPIFunctionality.SearchRequestAPICreator
 import com.example.films.model.dataClasses.Movie
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class FragmentMoviesList : Fragment() {
 
+    private var listener: SearchMoviesOnClick? = null
+
     private var movies: MutableList<Movie> = mutableListOf()
 
-    private val loadMoviesProvider: LoadMoviesProvider = LoadMoviesProvider()
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    private val loadMoviesProvider: LoadMoviesProvider =
+        LoadMoviesProvider()
     private var searchLine = ""
 
     private lateinit var searchRequest: String
     lateinit var searchEditText: EditText
     lateinit var tvFoundNum: TextView
-
 
     private val viewModel by viewModels<MoviesListViewModel> {
         FragmentMoviesListViewModelFactory(
@@ -61,19 +56,20 @@ class FragmentMoviesList : Fragment() {
         searchEditText = view.findViewById(R.id.et_search)
 
         val tvMoviesListName = view.findViewById<TextView>(R.id.tv_moviesNameOfMoviesList)
-        tvFoundNum = view.findViewById<TextView>(R.id.tv_moviesListFoundCount)
+        tvFoundNum = view.findViewById(R.id.tv_moviesListFoundCount)
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setTopMargin(tvMoviesListName, 6)
-            setTopMargin(view.findViewById(R.id.iv_circles), 24)
-            setTopMargin(recyclerView, 60)
+            setTopMargin(view.findViewById(R.id.iv_circles), 16)
+            setTopMargin(recyclerView, 64)
         }
 
         if (arguments != null) {
             movies =
                 arguments?.getSerializable(MOVIES_KEY) as MutableList<Movie>? ?: mutableListOf()
             searchLine = arguments?.getString(SEARCH_LINE_KEY) ?: ""
-            searchEditText.visibility = View.VISIBLE
+            searchEditText.visibility = View.GONE
+            tvMoviesListName.text = "Search: \"$searchLine\""
             tvFoundNum.text = "Found: ${movies.size}"
 
         } else {
@@ -91,6 +87,7 @@ class FragmentMoviesList : Fragment() {
 
             } else {
                 searchEditText.visibility = View.VISIBLE
+                searchEditText.setText("")
                 tvMoviesListName.visibility = View.GONE
                 tvFoundNum.visibility = View.GONE
             }
@@ -105,13 +102,16 @@ class FragmentMoviesList : Fragment() {
                 ) {
 
                     if (searchEditText.text.toString() == "") {
-                        Toast.makeText(context, "Please, enter search line", Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            context,
+                            "Please, enter search line",
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
 
                     } else {
-                        coroutineScope.launch {
-                            searchMovies()
-                        }
+                        searchRequest = searchEditText.text.toString()
+                        listener?.searchMoviesOnClick(searchRequest)
                     }
 
                     return true
@@ -157,24 +157,6 @@ class FragmentMoviesList : Fragment() {
         })
     }
 
-    private suspend fun searchMovies() {
-
-        searchRequest = searchEditText.text.toString()
-        movies = SearchRequestAPICreator().getMovies(searchRequest)
-        movies.sortByDescending { it.rating }
-        withContext(Dispatchers.Main) {
-            searchEditText.setText("")
-            searchEditText.visibility = View.GONE
-        }
-
-        tvFoundNum.text = "Found: ${movies.size}"
-
-        (activity as MainActivity).changeMoviesList(
-            movies,
-            searchRequest
-        )
-    }
-
     private fun setTopMargin(view: View, topMargin: Int) {
 
         if (view.layoutParams is MarginLayoutParams) {
@@ -183,6 +165,22 @@ class FragmentMoviesList : Fragment() {
             params.setMargins(params.leftMargin, topMargin, params.rightMargin, params.bottomMargin)
             view.requestLayout()
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SearchMoviesOnClick) {
+            listener = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface SearchMoviesOnClick {
+        fun searchMoviesOnClick(searchLine: String)
     }
 
 }

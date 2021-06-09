@@ -1,9 +1,10 @@
-package com.example.films.model.LoadAPIFunctionality
+package com.example.films.model.LoadAPIFunctionality.getDataFromAPIClasses
 
 import android.util.Log
 import com.android.academy.fundamentals.homework.data.JsonMovie
 import com.example.films.APIBaseUrl
 import com.example.films.TAG
+import com.example.films.model.LoadAPIFunctionality.GenresList
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.widthBackgroundImage
@@ -24,7 +25,9 @@ class SearchRequestAPICreator {
 
     suspend fun getMovies(request: String): MutableList<Movie> = withContext(Dispatchers.IO) {
 
-        genresList.addGenres(GenresListAPICreator().loadGenres())
+        genresList.addGenres(
+            GenresListAPICreator()
+                .loadGenres())
 
         val movies = mutableListOf<Movie>()
         try {
@@ -75,7 +78,7 @@ class SearchRequestAPICreator {
             Movie(
                 id = it.id,
                 title = it.title,
-                age = if (it.adult == null || it.adult) 18 else 12,
+                age = if (it.adult == null || it.adult) 16 else 13,
                 genres = getGenres(it.genreIds ?: listOf()),
                 reviewCount = it.votesCount ?: 0,
                 isLiked = false,

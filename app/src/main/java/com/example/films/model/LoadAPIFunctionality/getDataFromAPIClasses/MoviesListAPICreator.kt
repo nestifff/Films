@@ -1,8 +1,9 @@
-package com.example.films.model.LoadAPIFunctionality
+package com.example.films.model.LoadAPIFunctionality.getDataFromAPIClasses
 
 import android.util.Log
 import com.android.academy.fundamentals.homework.data.JsonMovie
 import com.example.films.*
+import com.example.films.model.LoadAPIFunctionality.GenresList
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +28,7 @@ class MoviesListAPICreator(
 
         } else {
 
-            for (i in 1..6)
+            for (i in 1..5)
                 try {
                     createGetPopularMoviesCall(i).execute().use { response ->
                         successfulLoadMovies(response)
@@ -65,7 +66,6 @@ class MoviesListAPICreator(
         Log.i(TAG, moviesJson.length.toString())
 
         movies.addAll(loadMoviesJson(moviesJson))
-        var i = 10
     }
 
     private suspend fun loadMoviesJson(dataStr: String): List<Movie> = withContext(Dispatchers.IO) {
@@ -77,7 +77,7 @@ class MoviesListAPICreator(
             Movie(
                 id = it.id,
                 title = it.title,
-                age = if (it.adult == null || it.adult) 18 else 12,
+                age = if (it.adult == null || it.adult) 16 else 13,
                 genres = getGenres(it.genreIds ?: listOf()),
                 reviewCount = it.votesCount ?: 0,
                 isLiked = false,

@@ -1,5 +1,7 @@
 package com.example.films.model.LoadAPIFunctionality
 
+import android.util.Log
+import com.example.films.TAG
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.database.MoviesGenresDB
@@ -17,6 +19,8 @@ fun loadMoviesFromDB(
 ): MutableList<Movie> {
 
     val moviesForDB = database.movieDao.getAllMovies()
+    val str = moviesForDB.find { it.title == "Joker" }?.idAPI
+    Log.i(TAG, "From loadMoviesFromDB: $str")
 
     return if (!(genres.isEmpty() || moviesForDB.isEmpty())) {
         joinMoviesWithGenes(moviesForDB, genres)
@@ -29,7 +33,9 @@ fun loadMoviesFromDB(
 suspend fun loadMoviesFromAPI(provider: LoadMoviesProvider?): MutableList<Movie> {
 
     val movies = provider?.loadMoviesProvider() ?: mutableListOf()
-    movies.sortByDescending { it.rating }
+    movies.sortByDescending { it.reviewCount }
+    val str = movies.find { it.title == "Joker" }?.id
+    Log.i(TAG, "From loadMoviesFromAPI: $str")
     return movies
 }
 
@@ -52,6 +58,7 @@ fun updateDBMoviesAndGetNovelty(
         }
     }
 
+    movieNovelties.sortByDescending { it.reviewCount }
     addMoviesToBD(newMovies, genres, database)
 
     return movieNovelties

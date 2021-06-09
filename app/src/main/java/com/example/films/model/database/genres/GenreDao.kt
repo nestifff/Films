@@ -2,6 +2,7 @@ package com.example.films.model.database.genres
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.films.model.dataClasses.Genre
 
@@ -14,6 +15,6 @@ interface GenreDao {
     @Query("DELETE from genres")
     fun deleteAllGenres()
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertGenres(vararg genres: Genre)
 }

@@ -1,15 +1,13 @@
 package com.example.films.moviesList
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.*
-import com.example.films.model.LoadAPIFunctionality.loadGenresFromDB
-import com.example.films.model.LoadAPIFunctionality.loadMoviesFromAPI
-import com.example.films.model.LoadAPIFunctionality.loadMoviesFromDB
-import com.example.films.model.LoadAPIFunctionality.updateDBMoviesAndGetNovelty
+import com.example.films.TAG
+import com.example.films.model.LoadAPIFunctionality.*
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.database.MoviesGenresDB
-import com.example.films.model.database.movies.MovieForDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -23,7 +21,7 @@ class MoviesListViewModel(
     val loadingMovies: LiveData<MutableList<Movie>>
         get() = _loadingMovies
 
-    private var alreadyLoadedFromAPI = false
+    private var isLoadedFromAPI = false
 
     private val database: MoviesGenresDB = MoviesGenresDB.create(applicationContext)
     private lateinit var genres: MutableList<Genre>
@@ -39,105 +37,47 @@ class MoviesListViewModel(
             genres = loadGenresFromDB(database)
             moviesFromDB = loadMoviesFromDB(database, genres)
 
-            if (moviesFromDB.size != 0) {
-                _loadingMovies.postValue(moviesFromDB)
-
-                if (!alreadyLoadedFromAPI) {
-                    moviesFromAPI = loadMoviesFromAPI(provider)
-                    genres = provider?.genresList?.genres ?: genres
-                    alreadyLoadedFromAPI = true
-
-                    if (updateDBMoviesAndGetNovelty(
-                            genres,
-                            moviesFromAPI,
-                            database
-                        )
-                            .size != 0
-                    ) {
-                        _loadingMovies.postValue(moviesFromAPI)
-                    }
-                }
-
-            } else {
+            if (moviesFromDB.isEmpty()) {
 
                 moviesFromAPI = loadMoviesFromAPI(provider)
-                alreadyLoadedFromAPI = true
-                _loadingMovies.postValue(moviesFromAPI)
 
                 if (moviesFromAPI.isNotEmpty()) {
+                    _loadingMovies.postValue(moviesFromAPI)
+                    val str = moviesFromAPI.find { it.title == "Joker" }?.id
+                    Log.i(TAG, "From loadMovies ViewModel moviesFromAPI: $str")
+                    isLoadedFromAPI = true
                     genres = provider?.genresList?.genres ?: genres
                     updateDBMoviesAndGetNovelty(genres, moviesFromAPI, database)
                 }
 
-            }
+            } else {
 
+                _loadingMovies.postValue(moviesFromDB)
+                val str = moviesFromDB.find { it.title == "Joker" }?.id
+                Log.i(TAG, "From loadMovies ViewModel moviesFromDB: $str")
 
-            /*genres = database.genreDao.getAllGenres()
-            moviesForDB = database.movieDao.getAllMovies()
+                if (!isLoadedFromAPI) {
 
-            if (!(genres.isEmpty() || moviesForDB.isEmpty())) {
+                    moviesFromAPI = loadMoviesFromAPI(provider)
+                    val str = moviesFromAPI.find { it.title == "Joker" }?.id
+                    Log.i(TAG, "From loadMovies ViewModel moviesFromAPI: $str")
 
-                createMoviesListFromBDData()
+                    if (moviesFromAPI.isNotEmpty()) {
 
-                if (!alreadyLoadedFromAPI) {
-                    moviesAddToBD = provider?.loadMoviesProvider() ?: mutableListOf()
-                    moviesAddToBD.sortByDescending { it.rating }
-                    alreadyLoadedFromAPI = true
-
-                    if (moviesAddToBD.isNotEmpty()) {
                         genres = provider?.genresList?.genres ?: genres
-                        addMoviesToBD()
+                        isLoadedFromAPI = true
+
+                        val moviesNovelty =
+                            updateDBMoviesAndGetNovelty(genres, moviesFromAPI, database)
+                        if (moviesNovelty.isNotEmpty()) {
+                            _loadingMovies.postValue(moviesFromAPI)
+                        }
                     }
                 }
-
-            } else {
-                moviesAddToBD = provider?.loadMoviesProvider() ?: mutableListOf()
-                moviesAddToBD.sortByDescending { it.rating }
-                _loadingMovies.postValue(moviesAddToBD)
-                alreadyLoadedFromAPI = true
-
-                if (moviesAddToBD.isNotEmpty()) {
-                    genres = provider?.genresList?.genres ?: genres
-                    addMoviesToBD()
-                }
-            }*/
-        }
-    }
-
-    /*private fun createMoviesListFromBDData() {
-
-        val movies: MutableList<Movie> = mutableListOf()
-        moviesForDB.sortBy { it.title }
-        val genresMap: Map<Int, Genre> = genres.map {
-            it.id to it
-        }.toMap()
-
-        var i = 0
-        val currGenresId: MutableList<Int> = mutableListOf()
-
-        while (i < moviesForDB.size) {
-            if (i == 0 || moviesForDB[i].title != moviesForDB[i - 1].title) {
-                val currGenres = mutableListOf<Genre>()
-                for (id: Int in currGenresId) {
-                    currGenres.add(genresMap[id] ?: Genre(0, ""))
-                }
-                movies.add(
-                    Movie(
-                        moviesForDB[i],
-                        currGenres
-                    )
-                )
-                currGenresId.clear()
-                currGenresId.add(moviesForDB[i].genreID)
-            } else {
-                currGenresId.add(moviesForDB[i].genreID)
             }
-            ++i
         }
 
-        movies.sortByDescending { it.rating }
-        _loadingMovies.postValue(movies)
-    }*/
+    }
 
 }
 

@@ -1,4 +1,4 @@
-package com.example.films.model.LoadAPIFunctionality
+package com.example.films.model.LoadAPIFunctionality.getDataFromAPIClasses
 
 import android.util.Log
 import com.android.academy.fundamentals.homework.data.JsonGenre
@@ -31,9 +31,6 @@ class GenresListAPICreator() {
                 errorLoadingGenres(e)
             }
 
-            for (genre in genres) {
-                Log.i(TAG, genre.name)
-            }
             genres
         }
     }
@@ -59,7 +56,6 @@ class GenresListAPICreator() {
 
         genresJson = genresJson.substringAfter("[").substringBefore(']')
         genresJson = "[$genresJson]"
-        Log.i(TAG, genresJson)
 
         return loadGenresJson(genresJson)
     }

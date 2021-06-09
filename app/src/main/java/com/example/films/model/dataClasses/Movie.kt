@@ -19,7 +19,7 @@ data class Movie(
 
     constructor(m: MovieForDB, genres: List<Genre>) :
             this(
-                id = m.id,
+                id = m.idAPI,
                 age = m.age,
                 title = m.title,
                 genres = ArrayList(genres),
