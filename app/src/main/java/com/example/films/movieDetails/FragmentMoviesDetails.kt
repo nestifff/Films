@@ -26,17 +26,24 @@ import com.example.films.model.dataClasses.MovieDetails
 import com.example.films.moviesList.MoviesListAdapter
 import com.example.films.moviesList.MoviesListClickListener
 import com.example.films.moviesList.MoviesListViewModel
+import java.io.Serializable
 
 
 class FragmentMoviesDetails : Fragment() {
 
     private var listener: TransactionsFragmentMDClicks? = null
     var movie: Movie? = null
-    lateinit var movieDetails: MovieDetails
+    private var movieDetails: MovieDetails? = null
 
     private lateinit var viewModel: MovieDetailsViewModel
 
     private lateinit var rvActorsList: RecyclerView
+
+    private lateinit var tvBudget: TextView
+    private lateinit var tvRevenue: TextView
+    private lateinit var tvData: TextView
+    private lateinit var tvTagline: TextView
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,9 +52,22 @@ class FragmentMoviesDetails : Fragment() {
     ): View? {
 
         movie = arguments?.getSerializable(MOVIE_IN_BUNDLE_FRAGMENT) as Movie?
+        //movieDetails = arguments?.getSerializable(MOVIE_DETAILS_IN_BUNDLE_FRAGMENT) as MovieDetails?
+
+        //if (movieDetails == null) {
         movie?.let {
             viewModel.loadMovie(it)
         }
+
+        viewModel.loadingMovie.observe(viewLifecycleOwner, Observer {
+            movieDetails = it
+            Log.i(TAG, it.toString())
+            detailsUploadedUpdate()
+        })
+
+        /*} else {
+            detailsUploadedUpdate()
+        }*/
 
         val view = inflater.inflate(R.layout.fragment_movie_details, container, false)
 
@@ -57,9 +77,19 @@ class FragmentMoviesDetails : Fragment() {
         val tvGenre: TextView = view.findViewById(R.id.tv_movie_details_genre)
         val tvNumOfReviews: TextView = view.findViewById(R.id.tv_movie_details_number_of_reviews)
         val rbRating: RatingBar = view.findViewById(R.id.rb_movie_details_rating)
+        val tvRating: TextView = view.findViewById(R.id.tv_movie_details_rating)
         val tvStoryline: TextView = view.findViewById(R.id.tv_movie_details_storyline)
 
         rvActorsList = view.findViewById(R.id.rv_movie_details_actors_list)
+        tvBudget = view.findViewById(R.id.tv_movie_details_budget)
+        tvRevenue = view.findViewById(R.id.tv_movie_details_revenue)
+        tvData = view.findViewById(R.id.tv_movie_details_release_data)
+        tvTagline = view.findViewById(R.id.tv_movie_details_tagline)
+
+        tvBudget.visibility = View.GONE
+        tvRevenue.visibility = View.GONE
+        tvData.visibility = View.GONE
+        tvTagline.visibility = View.GONE
 
         tvAgeLimit.text = "${movie?.age ?: 0}+"
         tvName.text = movie?.title ?: "---"
@@ -84,6 +114,7 @@ class FragmentMoviesDetails : Fragment() {
         tvNumOfReviews.text = "${movie?.reviewCount} reviews"
         tvStoryline.text = movie?.storyLine
         rbRating.rating = (movie?.rating ?: 0f) / 2
+        tvRating.text = movie?.rating.toString()
 
         view.findViewById<TextView>(R.id.tv_movie_details_button_back).apply {
             setOnClickListener {
@@ -91,11 +122,6 @@ class FragmentMoviesDetails : Fragment() {
             }
         }
 
-        viewModel.loadingMovie.observe(viewLifecycleOwner, Observer {
-            movieDetails = it
-            Log.i(TAG, it.toString())
-            detailsUploadedUpdate()
-        })
 
         val adapter = ActorsListAdapter(
             view.context,
@@ -112,8 +138,38 @@ class FragmentMoviesDetails : Fragment() {
     }
 
     private fun detailsUploadedUpdate() {
-        Toast.makeText(activity, "Details is uploaded!", Toast.LENGTH_SHORT).show()
-        (rvActorsList.adapter as ActorsListAdapter).updateActors(movieDetails.actors)
+
+        if (movieDetails != null) {
+
+            (rvActorsList.adapter as ActorsListAdapter).updateActors(
+                movieDetails?.actors ?: listOf()
+            )
+
+            if(movieDetails?.budget != 0) {
+                tvBudget.visibility = View.VISIBLE
+                tvBudget.text = "Budget:   ${movieDetails?.budget}"
+            }
+            if (movieDetails?.revenue != 0) {
+                tvRevenue.visibility = View.VISIBLE
+                tvRevenue.text = "Revenue: ${movieDetails?.revenue}"
+            }
+
+            tvData.visibility = View.VISIBLE
+            tvTagline.visibility = View.VISIBLE
+
+            tvData.text = "Release data: ${movieDetails?.releaseDate}"
+            tvTagline.text = movieDetails?.tagline
+
+            //this.arguments?.putSerializable(MOVIE_DETAILS_IN_BUNDLE_FRAGMENT, movieDetails)
+
+        } else {
+            Toast.makeText(context, "Network is not stable, can't load all data", Toast.LENGTH_LONG)
+                .show()
+            view?.findViewById<TextView>(R.id.cast_head_text)?.visibility = View.GONE
+            rvActorsList.visibility = View.GONE
+        }
+
+
     }
 
     override fun onAttach(context: Context) {
@@ -138,3 +194,4 @@ class FragmentMoviesDetails : Fragment() {
 }
 
 const val MOVIE_IN_BUNDLE_FRAGMENT = "movie"
+//const val MOVIE_DETAILS_IN_BUNDLE_FRAGMENT = "movieDetails"

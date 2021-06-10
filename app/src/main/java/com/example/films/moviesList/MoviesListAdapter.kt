@@ -48,10 +48,11 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val tvAgeLimit: TextView = view.findViewById(R.id.tv_movies_list_age_limit)
     private val tvGenre: TextView = view.findViewById(R.id.tv_movies_list_genre)
     private val tvNumOfReviews: TextView = view.findViewById(R.id.tv_movies_list_number_of_reviews)
-    private val tvLength: TextView = view.findViewById(R.id.tv_movies_list_length)
     private val rbRating: RatingBar = view.findViewById(R.id.rb_movie_details_rating)
     private val ivMoviePoster: ImageView = view.findViewById(R.id.iv_movies_list_movie_poster)
     private val ivIsLiked: ImageView = view.findViewById(R.id.iv_movies_list_like)
+    private val vIsLikedBackground: View = view.findViewById(R.id.iv_movies_list_background_like)
+    private val tvRating: TextView = view.findViewById(R.id.tv_movies_list_rating)
 
     fun bind(movie: Movie) {
 
@@ -70,8 +71,9 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
         tvGenre.text = strBuilt.toString()
 
-        tvNumOfReviews.text = "${movie.reviewCount} reviews"
+        tvNumOfReviews.text = "${movie.reviewCount} rev."
         rbRating.rating = movie.rating / 2
+        tvRating.text = movie.rating.toString()
 
         Glide.with(itemView.context)
             .load(movie.posterImageUrl)
@@ -83,7 +85,7 @@ class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             ivIsLiked.setImageResource(R.drawable.like_inactive)
         }
 
-        ivIsLiked.setOnClickListener {
+        vIsLikedBackground.setOnClickListener {
             if (movie.isLiked) {
                 ivIsLiked.setImageResource(R.drawable.like_inactive)
                 movie.isLiked = false

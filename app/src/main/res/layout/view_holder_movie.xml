@@ -46,15 +46,24 @@
         app:layout_constraintStart_toStartOf="@+id/iv_frame"
         app:layout_constraintTop_toTopOf="@+id/iv_frame" />
 
+    <View
+        android:id="@+id/iv_movies_list_background_like"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="3dp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_frame"
+        app:layout_constraintTop_toTopOf="@+id/iv_frame" />
+
     <ImageView
         android:id="@+id/iv_movies_list_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="12dp"
         android:src="@drawable/like_active"
-        app:layout_constraintEnd_toEndOf="@+id/iv_frame"
-        app:layout_constraintTop_toTopOf="@+id/iv_frame" />
+        app:layout_constraintEnd_toEndOf="@+id/iv_movies_list_background_like"
+        app:layout_constraintStart_toStartOf="@+id/iv_movies_list_background_like"
+        app:layout_constraintTop_toTopOf="@+id/iv_movies_list_background_like"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_movies_list_background_like" />
 
     <ImageView
         android:id="@+id/iv_square_age"
@@ -80,18 +89,30 @@
         app:layout_constraintTop_toTopOf="@+id/iv_square_age"
         tools:ignore="SmallSp" />
 
+    <TextView
+        android:id="@+id/tv_movies_list_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/_8_8"
+        android:textColor="@color/pink"
+        android:textSize="12sp"
+        app:layout_constraintTop_toTopOf="@+id/rb_movie_details_rating"
+        app:layout_constraintBottom_toBottomOf="@+id/rb_movie_details_rating"
+        app:layout_constraintStart_toStartOf="@+id/iv_frame" />
+
     <RatingBar
         android:id="@+id/rb_movie_details_rating"
         style="?android:ratingBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="20dp"
         android:numStars="5"
         android:rating="4"
         android:theme="@style/mySmallRatingBarTheme"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_movies_list_movie_poster"
-        app:layout_constraintStart_toStartOf="@+id/iv_movies_list_movie_poster" />
+        app:layout_constraintBottom_toTopOf="@+id/tv_movies_list_name"
+        app:layout_constraintStart_toEndOf="@+id/tv_movies_list_rating" />
 
 
     <TextView
@@ -105,7 +126,7 @@
         android:textSize="10sp"
         android:maxWidth="155dp"
         app:layout_constraintBottom_toTopOf="@+id/rb_movie_details_rating"
-        app:layout_constraintStart_toStartOf="@+id/iv_movies_list_movie_poster"
+        app:layout_constraintStart_toStartOf="@+id/iv_frame"
         tools:ignore="SmallSp" />
 
     <TextView
@@ -128,6 +149,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="6dp"
+        android:layout_marginBottom="12dp"
         android:text="@string/avengers_end_game"
         android:ellipsize="end"
         android:maxLines="1"
@@ -136,18 +158,7 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/iv_frame"
-        app:layout_constraintTop_toBottomOf="@+id/iv_movies_list_movie_poster" />
+        app:layout_constraintBottom_toBottomOf="@+id/iv_frame" />
 
-    <TextView
-        android:id="@+id/tv_movies_list_length"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/_137_min"
-        android:textColor="@color/gray"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/tv_movies_list_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_movies_list_name"
-        tools:ignore="SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

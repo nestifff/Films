@@ -13,14 +13,14 @@ import kotlinx.coroutines.launch
 
 class MovieDetailsViewModel(): ViewModel() {
 
-    private val _loadingMovie: MutableLiveData<MovieDetails> = MutableLiveData()
-    val loadingMovie: LiveData<MovieDetails>
+    private val _loadingMovie: MutableLiveData<MovieDetails?> = MutableLiveData()
+    val loadingMovie: LiveData<MovieDetails?>
         get() = _loadingMovie
 
     fun loadMovie(movie: Movie) {
 
         viewModelScope.launch {
-            val movieDetails: MovieDetails =
+            val movieDetails: MovieDetails? =
                 MovieDetailsAPICreator().loadMovieDetails(movie)
 
             _loadingMovie.postValue(movieDetails)

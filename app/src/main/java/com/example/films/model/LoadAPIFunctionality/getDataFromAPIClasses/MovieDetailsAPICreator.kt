@@ -19,11 +19,11 @@ import okhttp3.Response
 class MovieDetailsAPICreator {
 
     private val jsonFormat = Json { ignoreUnknownKeys = true }
-    private lateinit var movieDetails: MovieDetails
+    private var movieDetails: MovieDetails? = null
     private var actors = listOf<Actor>()
     private lateinit var movie: Movie
 
-    suspend fun loadMovieDetails(movieParams: Movie): MovieDetails = withContext(Dispatchers.IO) {
+    suspend fun loadMovieDetails(movieParams: Movie): MovieDetails? = withContext(Dispatchers.IO) {
 
         movie = movieParams
         actors = ActorsListAPICreator().loadActors(movieParams.id)

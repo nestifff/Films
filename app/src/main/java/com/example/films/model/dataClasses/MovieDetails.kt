@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.util.*
 
+@Serializable
 data class MovieDetails(
 
     var id: Int,
@@ -24,9 +25,4 @@ data class MovieDetails(
     var homepage: String,
     var actors: List<Actor>
 
-) {
-
-    override fun toString(): String {
-        return "MovieDetails(id=$id, age=$age, title='$title', genres=$genres, reviewCount=$reviewCount, isLiked=$isLiked, rating=$rating, posterImageUrl='$posterImageUrl', backgroundImageUrl='$backgroundImageUrl', storyLine='$storyLine', budget=$budget, revenue=$revenue, tagline='$tagline', runtime=$runtime, releaseDate='$releaseDate', homepage='$homepage', actors=$actors)"
-    }
-}
+)

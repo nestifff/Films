@@ -35,6 +35,7 @@
             android:text="@string/back"
             android:textColor="#6D6D80"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,41 +67,102 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_age_limit" />
 
         <TextView
+            android:id="@+id/tv_movie_details_tagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Tagline"
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_name"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
             android:id="@+id/tv_movie_details_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="@string/action_adventure_fantasy"
             android:textColor="#FF3466"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_name" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_tagline" />
+
+        <TextView
+            android:id="@+id/tv_movie_details_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/_8_8"
+            android:textColor="@color/pink"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="@+id/rb_movie_details_rating"
+            app:layout_constraintBottom_toBottomOf="@+id/rb_movie_details_rating"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <RatingBar
             android:id="@+id/rb_movie_details_rating"
             style="?android:ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:numStars="5"
             android:rating="4"
             android:theme="@style/mySmallRatingBarTheme"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_movie_details_rating"
             app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_genre" />
 
         <TextView
             android:id="@+id/tv_movie_details_number_of_reviews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
             android:text="@string/_125_reviews"
-            android:textColor="#6D6D80"
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/rb_movie_details_rating"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_movie_details_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="Budget: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_number_of_reviews" />
+
+        <TextView
+            android:id="@+id/tv_movie_details_revenue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:text="Revenue: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_budget" />
+
+        <TextView
+            android:id="@+id/tv_movie_details_release_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/rb_movie_details_rating"
-            app:layout_constraintStart_toEndOf="@+id/rb_movie_details_rating"
-            app:layout_constraintTop_toTopOf="@+id/rb_movie_details_rating" />
+            android:text="Data: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_revenue" />
+
 
         <TextView
             android:id="@+id/storyline_head_text"
@@ -113,7 +175,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rb_movie_details_rating" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_details_release_data" />
 
         <TextView
             android:id="@+id/tv_movie_details_storyline"
