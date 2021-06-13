@@ -7,13 +7,13 @@ import kotlinx.serialization.Serializable
 class JsonMovieDetails(
 
     @SerialName("budget")
-    val budget: Int,
+    val budget: Long,
     @SerialName("homepage")
     val homepage: String,
     @SerialName("release_date")
     val releaseDate: String,
     @SerialName("revenue")
-    val revenue: Int,
+    val revenue: Long,
     @SerialName("runtime")
     val runtime: Int,
     @SerialName("tagline")

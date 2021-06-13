@@ -145,11 +145,11 @@ class FragmentMoviesDetails : Fragment() {
                 movieDetails?.actors ?: listOf()
             )
 
-            if(movieDetails?.budget != 0) {
+            if(movieDetails?.budget != 0.toLong()) {
                 tvBudget.visibility = View.VISIBLE
                 tvBudget.text = "Budget:   ${movieDetails?.budget}"
             }
-            if (movieDetails?.revenue != 0) {
+            if (movieDetails?.revenue != 0.toLong()) {
                 tvRevenue.visibility = View.VISIBLE
                 tvRevenue.text = "Revenue: ${movieDetails?.revenue}"
             }
