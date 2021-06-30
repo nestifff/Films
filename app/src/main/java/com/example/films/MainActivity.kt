@@ -21,6 +21,7 @@ import com.example.films.moviesList.SEARCH_LINE_KEY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(),
@@ -109,18 +110,23 @@ class MainActivity : AppCompatActivity(),
                     .getMovies(searchLine)
             movies.sortByDescending { it.reviewCount }
 
-            val fragment = FragmentMoviesList()
 
-            val bundle = bundleOf(
-                MOVIES_KEY to movies,
-                SEARCH_LINE_KEY to searchLine
-            )
-            fragment.arguments = bundle
+            withContext(Dispatchers.Main) {
 
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
+                val fragment = FragmentMoviesList()
+
+                val bundle = bundleOf(
+                    MOVIES_KEY to movies,
+                    SEARCH_LINE_KEY to searchLine
+                )
+                fragment.arguments = bundle
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
         }
     }
 }
