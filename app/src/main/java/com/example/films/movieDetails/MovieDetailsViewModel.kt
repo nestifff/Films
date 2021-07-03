@@ -17,11 +17,11 @@ class MovieDetailsViewModel(): ViewModel() {
     val loadingMovie: LiveData<MovieDetails?>
         get() = _loadingMovie
 
-    fun loadMovie(movie: Movie) {
+    fun loadMovie(movieId: Int) {
 
         viewModelScope.launch {
             val movieDetails: MovieDetails? =
-                MovieDetailsAPICreator().loadMovieDetails(movie)
+                MovieDetailsAPICreator().loadMovieDetails(movieId)
 
             _loadingMovie.postValue(movieDetails)
         }

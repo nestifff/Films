@@ -21,16 +21,13 @@ class MovieDetailsAPICreator {
     private val jsonFormat = Json { ignoreUnknownKeys = true }
     private var movieDetails: MovieDetails? = null
     private var actors = listOf<Actor>()
-    private lateinit var movie: Movie
 
-    suspend fun loadMovieDetails(movieParams: Movie): MovieDetails? = withContext(Dispatchers.IO) {
+    suspend fun loadMovieDetails(id: Int): MovieDetails? = withContext(Dispatchers.IO) {
 
-        movie = movieParams
-        actors = ActorsListAPICreator().loadActors(movieParams.id)
-
+        actors = ActorsListAPICreator().loadActors(id)
 
         try {
-            createGetMovieDetailsCall(movieParams.id).execute().use { response ->
+            createGetMovieDetailsCall(id).execute().use { response ->
                 successfulLoadMovies(response)
             }
         } catch (e: Exception) {
@@ -69,16 +66,16 @@ class MovieDetailsAPICreator {
             val jsonMovieDetails = jsonFormat.decodeFromString<JsonMovieDetails>(dataStr)
 
             MovieDetails(
-                movie.id,
-                movie.age,
-                movie.title,
-                movie.genres,
-                movie.reviewCount,
-                movie.isLiked,
-                movie.rating,
-                movie.posterImageUrl,
-                movie.backgroundImageUrl,
-                movie.storyLine,
+                jsonMovieDetails.id,
+                age = if (jsonMovieDetails.adult != false) 16 else 13,
+                jsonMovieDetails.title,
+                genres = jsonMovieDetails.genres,
+                jsonMovieDetails.votesCount ?: 0,
+                false,
+                jsonMovieDetails.ratings ?: 0f,
+                jsonMovieDetails.posterPicture ?: "",
+                "${APIBaseUrl}${widthBackgroundImage}/${jsonMovieDetails.backdropPicture ?: "/xRI636TOdS1K1GBqIBRSmfZ1T5x.jpg"}",
+                jsonMovieDetails.overview ?: "",
                 jsonMovieDetails.budget,
                 jsonMovieDetails.revenue,
                 jsonMovieDetails.tagline,

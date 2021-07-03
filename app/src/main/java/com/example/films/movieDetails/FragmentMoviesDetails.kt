@@ -33,6 +33,7 @@ class FragmentMoviesDetails : Fragment() {
 
     private var listener: TransactionsFragmentMDClicks? = null
     var movie: Movie? = null
+    private var movieId: Int? = null
     private var movieDetails: MovieDetails? = null
 
     private lateinit var viewModel: MovieDetailsViewModel
@@ -44,6 +45,14 @@ class FragmentMoviesDetails : Fragment() {
     private lateinit var tvData: TextView
     private lateinit var tvTagline: TextView
 
+    private lateinit var ivPoster: ImageView
+    private lateinit var tvAgeLimit: TextView
+    private lateinit var tvName: TextView
+    private lateinit var tvGenre: TextView
+    private lateinit var tvNumOfReviews: TextView
+    private lateinit var rbRating: RatingBar
+    private lateinit var tvRating: TextView
+    private lateinit var tvStoryline: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,11 +60,14 @@ class FragmentMoviesDetails : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        movieId = arguments?.getInt(MOVIE_ID_IN_BUNDLE_FRAGMENT) as Int
         movie = arguments?.getSerializable(MOVIE_IN_BUNDLE_FRAGMENT) as Movie?
         //movieDetails = arguments?.getSerializable(MOVIE_DETAILS_IN_BUNDLE_FRAGMENT) as MovieDetails?
 
+        movieId = movie?.id ?: movieId
+
         //if (movieDetails == null) {
-        movie?.let {
+        movieId?.let {
             viewModel.loadMovie(it)
         }
 
@@ -71,14 +83,14 @@ class FragmentMoviesDetails : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_movie_details, container, false)
 
-        val ivPoster: ImageView = view.findViewById(R.id.iv_movie_details_picture_background_top)
-        val tvAgeLimit: TextView = view.findViewById(R.id.tv_movie_details_age_limit)
-        val tvName: TextView = view.findViewById(R.id.tv_movie_details_name)
-        val tvGenre: TextView = view.findViewById(R.id.tv_movie_details_genre)
-        val tvNumOfReviews: TextView = view.findViewById(R.id.tv_movie_details_number_of_reviews)
-        val rbRating: RatingBar = view.findViewById(R.id.rb_movie_details_rating)
-        val tvRating: TextView = view.findViewById(R.id.tv_movie_details_rating)
-        val tvStoryline: TextView = view.findViewById(R.id.tv_movie_details_storyline)
+        ivPoster = view.findViewById(R.id.iv_movie_details_picture_background_top)
+        tvAgeLimit = view.findViewById(R.id.tv_movie_details_age_limit)
+        tvName = view.findViewById(R.id.tv_movie_details_name)
+        tvGenre = view.findViewById(R.id.tv_movie_details_genre)
+        tvNumOfReviews = view.findViewById(R.id.tv_movie_details_number_of_reviews)
+        rbRating = view.findViewById(R.id.rb_movie_details_rating)
+        tvRating = view.findViewById(R.id.tv_movie_details_rating)
+        tvStoryline = view.findViewById(R.id.tv_movie_details_storyline)
 
         rvActorsList = view.findViewById(R.id.rv_movie_details_actors_list)
         tvBudget = view.findViewById(R.id.tv_movie_details_budget)
@@ -90,6 +102,32 @@ class FragmentMoviesDetails : Fragment() {
         tvRevenue.visibility = View.GONE
         tvData.visibility = View.GONE
         tvTagline.visibility = View.GONE
+
+        if (movie != null) {
+            loadStartDataMovieNotNull(view)
+        }
+
+        view.findViewById<TextView>(R.id.tv_movie_details_button_back).apply {
+            setOnClickListener {
+                listener?.backOnClick()
+            }
+        }
+
+        val adapter = ActorsListAdapter(
+            view.context,
+            listOf()
+        )
+        rvActorsList.adapter = adapter
+
+        rvActorsList.layoutManager = LinearLayoutManager(
+            view.context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
+
+        return view
+    }
+
+    private fun loadStartDataMovieNotNull(view: View) {
 
         tvAgeLimit.text = "${movie?.age ?: 0}+"
         tvName.text = movie?.title ?: "---"
@@ -115,31 +153,39 @@ class FragmentMoviesDetails : Fragment() {
         tvStoryline.text = movie?.storyLine
         rbRating.rating = (movie?.rating ?: 0f) / 2
         tvRating.text = movie?.rating.toString()
-
-        view.findViewById<TextView>(R.id.tv_movie_details_button_back).apply {
-            setOnClickListener {
-                listener?.backOnClick()
-            }
-        }
-
-
-        val adapter = ActorsListAdapter(
-            view.context,
-            listOf()
-        )
-        rvActorsList.adapter = adapter
-
-        rvActorsList.layoutManager = LinearLayoutManager(
-            view.context,
-            LinearLayoutManager.HORIZONTAL, false
-        )
-
-        return view
     }
 
     private fun detailsUploadedUpdate() {
 
         if (movieDetails != null) {
+
+            if (movie == null) {
+
+                tvAgeLimit.text = "${movieDetails?.age ?: 0}+"
+                tvName.text = movieDetails?.title ?: "---"
+
+                Glide.with(requireContext())
+                    .load(movieDetails?.backgroundImageUrl)
+                    .into(ivPoster)
+
+                val strBuilt: StringBuilder = java.lang.StringBuilder()
+                for ((index, genre) in movieDetails!!.genres.withIndex()) {
+                    val name: String = genre.name
+                    strBuilt.append(
+                        when (index) {
+                            (movieDetails!!.genres.size - 1) -> name
+                            else -> "$name, "
+                        }
+                    )
+                }
+
+                tvGenre.text = strBuilt.toString()
+
+                tvNumOfReviews.text = "${movieDetails?.reviewCount} reviews"
+                tvStoryline.text = movieDetails?.storyLine
+                rbRating.rating = (movieDetails?.rating ?: 0f) / 2
+                tvRating.text = movieDetails?.rating.toString()
+            }
 
             (rvActorsList.adapter as ActorsListAdapter).updateActors(
                 movieDetails?.actors ?: listOf()
@@ -169,7 +215,6 @@ class FragmentMoviesDetails : Fragment() {
             rvActorsList.visibility = View.GONE
         }
 
-
     }
 
     override fun onAttach(context: Context) {
@@ -194,4 +239,5 @@ class FragmentMoviesDetails : Fragment() {
 }
 
 const val MOVIE_IN_BUNDLE_FRAGMENT = "movie"
+const val MOVIE_ID_IN_BUNDLE_FRAGMENT = "movieIDBundleFragment"
 //const val MOVIE_DETAILS_IN_BUNDLE_FRAGMENT = "movieDetails"

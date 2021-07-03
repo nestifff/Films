@@ -42,36 +42,38 @@ class MoviesListViewModel(
                 moviesFromAPI = loadMoviesFromAPI(provider)
 
                 if (moviesFromAPI.isNotEmpty()) {
+
                     _loadingMovies.postValue(moviesFromAPI)
-                    val str = moviesFromAPI.find { it.title == "Joker" }?.id
-                    Log.i(TAG, "From loadMovies ViewModel moviesFromAPI: $str")
+
                     isLoadedFromAPI = true
                     genres = provider?.genresList?.genres ?: genres
-                    updateDBMoviesAndGetNovelty(genres, moviesFromAPI, database)
+
+                    addMoviesToBD(
+                        genres = genres,
+                        movies = moviesFromAPI,
+                        database = database
+                    )
                 }
 
             } else {
 
                 _loadingMovies.postValue(moviesFromDB)
-                val str = moviesFromDB.find { it.title == "Joker" }?.id
-                Log.i(TAG, "From loadMovies ViewModel moviesFromDB: $str")
 
                 if (!isLoadedFromAPI) {
 
                     moviesFromAPI = loadMoviesFromAPI(provider)
-                    val str = moviesFromAPI.find { it.title == "Joker" }?.id
-                    Log.i(TAG, "From loadMovies ViewModel moviesFromAPI: $str")
 
                     if (moviesFromAPI.isNotEmpty()) {
 
                         genres = provider?.genresList?.genres ?: genres
                         isLoadedFromAPI = true
 
-                        val moviesNovelty =
-                            updateDBMoviesAndGetNovelty(genres, moviesFromAPI, database)
-                        if (moviesNovelty.isNotEmpty()) {
-                            _loadingMovies.postValue(moviesFromAPI)
-                        }
+                        addMoviesToBD(
+                            genres = genres,
+                            movies = moviesFromAPI,
+                            database = database
+                        )
+
                     }
                 }
             }

@@ -17,3 +17,5 @@ const val widthActorImage = "w780"
 const val TAG_retrieveMoviesWorkers = "tag_to_retrieve_movies_between_workers"
 
 const val NOTIFICATION_CHANNEL_ID = "com.example.films_notifications"
+
+const val REQUEST_CODE_START_FROM_NOTIFICATION = 235345435

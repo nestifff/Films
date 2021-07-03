@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.films.TAG
+import com.example.films.model.LoadAPIFunctionality.addMoviesToBD
 import com.example.films.model.LoadAPIFunctionality.loadMoviesFromAPI
-import com.example.films.model.LoadAPIFunctionality.updateDBMoviesAndGetNovelty
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.database.MoviesGenresDB
 import com.example.films.moviesList.LoadMoviesProvider
@@ -14,11 +14,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import kotlin.random.Random
 
 class WorkerLoadFromAPI(
     private val context: Context,
     private val params: WorkerParameters
-): Worker(context, params) {
+) : Worker(context, params) {
 
     override fun doWork(): Result {
         val provider =
@@ -32,13 +33,15 @@ class WorkerLoadFromAPI(
                 val movies: MutableList<Movie> = loadMoviesFromAPI(provider)
                 val genres = provider.genresList.genres
 
-                val moviesNovelty =
-                    updateDBMoviesAndGetNovelty(genres, movies, database)
+                addMoviesToBD(
+                    genres = genres,
+                    movies = movies,
+                    database = database
+                )
 
-                if (moviesNovelty.size != 0) {
-                    moviesNovelty.sortBy { it.rating }
-//                    createNotificationNewMovie(applicationContext, moviesNovelty[0])
-                }
+                val randomInd: Int = Random.nextInt(0, movies.size - 1)
+
+                createNotificationRandomMovie(applicationContext, movies[randomInd])
 
             } catch (e: Exception) {
                 Log.d(TAG, e.message ?: "")

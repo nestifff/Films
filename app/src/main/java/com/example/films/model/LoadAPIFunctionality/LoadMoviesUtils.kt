@@ -19,8 +19,6 @@ fun loadMoviesFromDB(
 ): MutableList<Movie> {
 
     val moviesForDB = database.movieDao.getAllMovies()
-    val str = moviesForDB.find { it.title == "Joker" }?.idAPI
-    Log.i(TAG, "From loadMoviesFromDB: $str")
 
     return if (!(genres.isEmpty() || moviesForDB.isEmpty())) {
         joinMoviesWithGenes(moviesForDB, genres)
@@ -34,36 +32,10 @@ suspend fun loadMoviesFromAPI(provider: LoadMoviesProvider?): MutableList<Movie>
 
     val movies = provider?.loadMoviesProvider() ?: mutableListOf()
     movies.sortByDescending { it.reviewCount }
-    val str = movies.find { it.title == "Joker" }?.id
-    Log.i(TAG, "From loadMoviesFromAPI: $str")
+
     return movies
 }
 
-fun updateDBMoviesAndGetNovelty(
-
-    genres: MutableList<Genre>,
-    newMovies: MutableList<Movie>,
-    database: MoviesGenresDB
-
-): MutableList<Movie> {
-
-    val movieNovelties: MutableList<Movie> = mutableListOf()
-
-    var movie: MovieForDB?
-
-    for (newMovie in newMovies) {
-        movie = database.movieDao.findMovieByID(newMovie.id)
-        if (movie == null) {
-            movieNovelties.add(newMovie)
-        }
-    }
-
-    movieNovelties.sortByDescending { it.reviewCount }
-    addMoviesToBD(newMovies, genres, database)
-
-    return movieNovelties
-
-}
 
 fun addMoviesToBD(
     movies: MutableList<Movie>,
