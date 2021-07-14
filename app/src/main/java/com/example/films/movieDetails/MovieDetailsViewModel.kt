@@ -19,11 +19,14 @@ class MovieDetailsViewModel(): ViewModel() {
 
     fun loadMovie(movieId: Int) {
 
-        viewModelScope.launch {
-            val movieDetails: MovieDetails? =
-                MovieDetailsAPICreator().loadMovieDetails(movieId)
+        if (_loadingMovie.value == null) {
 
-            _loadingMovie.postValue(movieDetails)
+            viewModelScope.launch {
+                val movieDetails: MovieDetails? =
+                    MovieDetailsAPICreator().loadMovieDetails(movieId)
+
+                _loadingMovie.postValue(movieDetails)
+            }
         }
     }
 

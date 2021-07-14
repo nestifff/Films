@@ -63,7 +63,6 @@ class MoviesListAPICreator(
 
         moviesJson = moviesJson.substringAfter("[").substringBefore("],\"total_pages\"")
         moviesJson = "[$moviesJson]"
-        Log.i(TAG, moviesJson.length.toString())
 
         movies.addAll(loadMoviesJson(moviesJson))
     }

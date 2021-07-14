@@ -46,7 +46,7 @@ class App: Application() {
                 8,
                 TimeUnit.HOURS
             )
-                .setInitialDelay(10, TimeUnit.MINUTES)
+                .setInitialDelay(5, TimeUnit.SECONDS)
                 .setConstraints(constraints)
                 .build()
 

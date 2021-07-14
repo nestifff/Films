@@ -45,7 +45,6 @@ class ActorsListAPICreator {
     private suspend fun successfulLoadActors(response: Response, id: Int): List<Actor> {
 
         var actorsJson = response.body?.string() ?: ""
-        Log.i(TAG, actorsJson)
 
         if (actorsJson == "") {
             return mutableListOf()
@@ -54,7 +53,6 @@ class ActorsListAPICreator {
         actorsJson = actorsJson.substringAfter("{\"id\":$id,\"cast\":").substringBeforeLast(
             ",\"crew\":["
         )
-        Log.i(TAG, actorsJson)
 
         return loadActorsJson(actorsJson)
     }
@@ -71,7 +69,6 @@ class ActorsListAPICreator {
                     "$APIBaseUrl$widthActorImage/${actor.imageUrl}"
                 }
 
-            Log.i(TAG, actor.toString())
         }
         actors
     }

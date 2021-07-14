@@ -1,11 +1,11 @@
 package com.example.films
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentManager
 import com.example.films.model.BackgroundUpdateFilms.PENDING_INTENT_GET_MOVIE_ID
 import com.example.films.model.LoadAPIFunctionality.getDataFromAPIClasses.SearchRequestAPICreator
 import com.example.films.model.dataClasses.Movie
@@ -32,9 +32,12 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         this.supportActionBar?.hide()
-        Log.i(TAG, "In MainActivity")
 
-        if (intent.action == Intent.ACTION_VIEW) {
+        Log.i(TAG, "intent.action = ${intent.action}")
+
+        if ((intent.action == Intent.ACTION_VIEW)
+            && (savedInstanceState == null)
+        ) {
             showMovieDetails(intent)
         }
     }
@@ -43,6 +46,9 @@ class MainActivity : AppCompatActivity(),
 
         super.onNewIntent(intent)
 
+        Log.i(TAG, "onNewIntent")
+        Log.i(TAG, "intent.action = ${intent?.action}")
+
         if (intent?.action == Intent.ACTION_VIEW) {
             showMovieDetails(intent)
         }
@@ -50,7 +56,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun showMovieDetails(intent: Intent) {
 
-        while (supportFragmentManager.backStackEntryCount != 0) {
+        for (i in 0 until supportFragmentManager.backStackEntryCount) {
             supportFragmentManager.popBackStack()
         }
 
@@ -64,6 +70,7 @@ class MainActivity : AppCompatActivity(),
             .replace(R.id.fragment_container, fragmentMoviesDetails)
             .addToBackStack(null)
             .commit()
+
     }
 
     override fun backOnClick() {

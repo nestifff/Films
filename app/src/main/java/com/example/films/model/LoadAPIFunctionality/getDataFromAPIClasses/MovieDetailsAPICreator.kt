@@ -56,7 +56,6 @@ class MovieDetailsAPICreator {
         if (moviesJson == "") {
             return
         }
-        Log.i(TAG, moviesJson.length.toString())
         movieDetails = loadMovieDetailsJson(moviesJson)
     }
 

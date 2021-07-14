@@ -73,7 +73,6 @@ class FragmentMoviesDetails : Fragment() {
 
         viewModel.loadingMovie.observe(viewLifecycleOwner, Observer {
             movieDetails = it
-            Log.i(TAG, it.toString())
             detailsUploadedUpdate()
         })
 

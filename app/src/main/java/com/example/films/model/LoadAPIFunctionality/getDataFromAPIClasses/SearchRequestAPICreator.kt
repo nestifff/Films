@@ -64,7 +64,6 @@ class SearchRequestAPICreator {
 
         moviesJson = moviesJson.substringAfter("[").substringBefore("],\"total_pages\"")
         moviesJson = "[$moviesJson]"
-        Log.i(TAG, moviesJson.length.toString())
 
         return loadMoviesJson(moviesJson)
     }
