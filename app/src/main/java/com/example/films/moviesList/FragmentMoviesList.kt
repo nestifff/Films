@@ -131,11 +131,15 @@ class FragmentMoviesList : Fragment() {
         recyclerView.layoutManager =
             when (resources.configuration.orientation) {
 
-                ORIENTATION_PORTRAIT -> GridLayoutManager(view.context, 2)
+                ORIENTATION_PORTRAIT -> GridLayoutManager(
+                    view.context,
+                    2
+                )
 
                 else -> LinearLayoutManager(
                     view.context,
-                    LinearLayoutManager.HORIZONTAL, false
+                    LinearLayoutManager.HORIZONTAL,
+                    false
                 )
             }
 

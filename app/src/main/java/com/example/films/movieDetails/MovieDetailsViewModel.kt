@@ -11,7 +11,7 @@ import com.example.films.model.dataClasses.MovieDetails
 import kotlinx.coroutines.launch
 
 
-class MovieDetailsViewModel(): ViewModel() {
+class MovieDetailsViewModel: ViewModel() {
 
     private val _loadingMovie: MutableLiveData<MovieDetails?> = MutableLiveData()
     val loadingMovie: LiveData<MovieDetails?>

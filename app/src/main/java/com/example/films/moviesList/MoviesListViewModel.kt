@@ -11,6 +11,7 @@ import com.example.films.model.database.MoviesGenresDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 class MoviesListViewModel(
     private val provider: LoadMoviesProvider?,
     private val applicationContext: Context
