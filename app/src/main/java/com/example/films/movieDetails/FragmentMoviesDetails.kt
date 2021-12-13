@@ -1,10 +1,7 @@
 package com.example.films.movieDetails
 
 import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,21 +9,16 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.films.model.dataClasses.Movie
 import com.example.films.R
-import com.example.films.TAG
+import com.example.films.model.dataClasses.Movie
 import com.example.films.model.dataClasses.MovieDetails
-import com.example.films.moviesList.MoviesListAdapter
-import com.example.films.moviesList.MoviesListClickListener
-import com.example.films.moviesList.MoviesListViewModel
-import java.io.Serializable
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FragmentMoviesDetails : Fragment() {
@@ -36,7 +28,7 @@ class FragmentMoviesDetails : Fragment() {
     private var movieId: Int? = null
     private var movieDetails: MovieDetails? = null
 
-    private lateinit var viewModel: MovieDetailsViewModel
+    private val viewModel: MovieDetailsViewModel by viewModel()
 
     private lateinit var rvActorsList: RecyclerView
 
@@ -190,7 +182,7 @@ class FragmentMoviesDetails : Fragment() {
                 movieDetails?.actors ?: listOf()
             )
 
-            if(movieDetails?.budget != 0.toLong()) {
+            if (movieDetails?.budget != 0.toLong()) {
                 tvBudget.visibility = View.VISIBLE
                 tvBudget.text = "Budget:   ${movieDetails?.budget}"
             }
@@ -221,9 +213,9 @@ class FragmentMoviesDetails : Fragment() {
         if (context is TransactionsFragmentMDClicks) {
             listener = context
         }
-        viewModel =
-            ViewModelProviders.of(this@FragmentMoviesDetails)
-                .get(MovieDetailsViewModel::class.java)
+//        viewModel =
+//            ViewModelProviders.of(this@FragmentMoviesDetails)
+//                .get(MovieDetailsViewModel::class.java)
     }
 
     override fun onDetach() {

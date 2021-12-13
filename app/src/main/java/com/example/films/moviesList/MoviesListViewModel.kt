@@ -1,10 +1,11 @@
 package com.example.films.moviesList
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
-import com.example.films.TAG
-import com.example.films.model.LoadAPIFunctionality.*
+import com.example.films.model.LoadAPIFunctionality.addMoviesToBD
+import com.example.films.model.LoadAPIFunctionality.loadGenresFromDB
+import com.example.films.model.LoadAPIFunctionality.loadMoviesFromAPI
+import com.example.films.model.LoadAPIFunctionality.loadMoviesFromDB
 import com.example.films.model.dataClasses.Genre
 import com.example.films.model.dataClasses.Movie
 import com.example.films.model.database.MoviesGenresDB

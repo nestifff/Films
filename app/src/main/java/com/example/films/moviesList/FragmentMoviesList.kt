@@ -14,13 +14,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.films.R
 import com.example.films.model.dataClasses.Movie
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class FragmentMoviesList : Fragment() {
@@ -29,19 +30,14 @@ class FragmentMoviesList : Fragment() {
 
     private var movies: MutableList<Movie> = mutableListOf()
 
-    private val loadMoviesProvider: LoadMoviesProvider =
-        LoadMoviesProvider()
     private var searchLine = ""
 
     private lateinit var searchRequest: String
     lateinit var searchEditText: EditText
-    lateinit var tvFoundNum: TextView
+    private lateinit var tvFoundNum: TextView
 
-    private val viewModel by viewModels<MoviesListViewModel> {
-        FragmentMoviesListViewModelFactory(
-            loadMoviesProvider,
-            requireContext().applicationContext
-        )
+    private val viewModel: MoviesListViewModel by viewModel {
+        parametersOf(requireContext().applicationContext)
     }
 
     override fun onCreateView(
